@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Eric {
-    private static final String[] tasks = new String[100];
+    private static final Task[] tasks = new Task[100];
     private static int task_count = 0;
 
     public static void main(String[] args) {
@@ -35,11 +35,11 @@ public class Eric {
     }
 
     /** Adds new task to tasks array */
-    public static void addTask(String task) {
-        tasks[task_count] = task;
+    public static void addTask(String task_description) {
+        tasks[task_count] = new Task(task_description);
         task_count++;
         linebreak();
-        System.out.println("  added: " + task);
+        System.out.println("  added: " + task_description);
         linebreak();
 
     }
