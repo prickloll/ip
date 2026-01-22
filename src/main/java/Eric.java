@@ -23,7 +23,21 @@ public class Eric {
                 System.out.println("  Bye. Hope to see you again soon!");
                 linebreak();
                 break;
-            }  else if (user_input.equals("list")) {
+            }  else if (user_input.startsWith("mark ")) {
+                int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
+                tasks[task_index].markDone();
+                linebreak();
+                System.out.println("  Nice I've marked this task as done:");
+                System.out.println("    " + tasks[task_index].toString() + "/n");
+                linebreak();
+            } else if (user_input.startsWith("unmark ")) {
+                int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
+                tasks[task_index].markUndone();
+                linebreak();
+                System.out.println("  OK, I've marked this task as not done yet:");
+                System.out.println("    " + tasks[task_index].toString() + "/n");
+                linebreak();
+            } else if (user_input.equals("list")) {
                 listTask();
             }
             else {
