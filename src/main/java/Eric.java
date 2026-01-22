@@ -1,8 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Eric {
-    private static final Task[] tasks = new Task[100];
-    private static int taskCount = 0;
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -37,22 +37,13 @@ public class Eric {
 
     }
 
-    /** Adds new task to tasks array */
-    public static void addTask(String task_description) {
-        tasks[taskCount] = new Task(task_description);
-        taskCount++;
-        linebreak();
-        System.out.println("  added: " + task_description);
-        linebreak();
-
-    }
 
     /** list tasks */
     public static void listTask() {
         linebreak();
         System.out.println("  Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println("  " + (i+1) + ". " + tasks[i].toString());
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("  " + (i+1) + ". " + tasks.get(i));
         }
         linebreak();
     }
@@ -72,21 +63,21 @@ public class Eric {
                 throw new EricException("Task number not specified!");
             }
             int index = Integer.parseInt(inputs[1]) - 1;
-            if (index < 0 || index >= taskCount) {
+            if (index < 0 || index >= tasks.size()) {
                 throw new EricException("Task number specified not in range of tasks available!");
             }
             if (inputs[0].equals("mark")) {
-                tasks[index].markDone();
+                tasks.get(index).markDone();
                 linebreak();
                 System.out.println("  Nice I've marked this task as done:");
-                System.out.println("    " + tasks[index].toString());
+                System.out.println("    " + tasks.get(index));
                 linebreak();
 
             } else {
-                tasks[index].markUndone();
+                tasks.get(index).markUndone();
                 linebreak();
                 System.out.println("  OK, I've marked this task as not done yet:");
-                System.out.println("    " + tasks[index].toString());
+                System.out.println("    " + tasks.get(index));
                 linebreak();
             }
 
@@ -98,27 +89,28 @@ public class Eric {
     }
 
     /** Specialised message printing for specific task types */
-    public static void taskMsg() {
+    public static void taskMsg(Task t) {
         linebreak();
         System.out.println(" Got it. I've added this task:");
-        System.out.println("    " + tasks[taskCount-1]);
-        System.out.println("  Now you have " + (taskCount) + " tasks in the list.");
+        System.out.println("    " + t);
+        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
         linebreak();
     }
 
 
     /** Adds new todo task to tasks array */
-    public static void addTodo(String userInput) throws EricException{
+    public static Task addTodo(String userInput) throws EricException{
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
             throw new EricException("The todo's description cannot be empty!");
         }
-        tasks[taskCount] = new Todo(descriptions[1]);
-        taskCount++;
+        Task t = new Todo(descriptions[1]);
+        tasks.add(t);
+        return t;
     }
 
     /** Adds new deadline task to tasks array */
-    public static void addDeadline(String userInput) throws EricException {
+    public static Task addDeadline(String userInput) throws EricException {
         if (!userInput.contains("/by")) {
             throw new EricException("Missing /by after declaring a deadline task!");
         }
@@ -127,12 +119,13 @@ public class Eric {
         if (descriptions.length < 2 || descriptions[1].trim().isBlank()) {
             throw new EricException("Missing deadline after /by!");
         }
-        tasks[taskCount] = new Deadline(descriptions[0], descriptions[1]);
-        taskCount++;
+        Task t = new Deadline(descriptions[0], descriptions[1]);
+        tasks.add(t);
+        return t;
     }
 
     /** Adds new event task to tasks array */
-    public static void addEvent(String userInput) throws EricException{
+    public static Task addEvent(String userInput) throws EricException{
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new EricException("Event must have /from and /to identifiers!");
 
@@ -146,22 +139,22 @@ public class Eric {
         if (dateParts.length < 2 || dateParts[0].trim().isBlank() || dateParts[1].trim().isBlank()) {
             throw new EricException("Event missing values after /from and /to!");
         }
-        tasks[taskCount] = new Event(descriptions[0], dateParts[0].trim(), dateParts[1].trim());
-        taskCount++;
+        Task t = new Event(descriptions[0], dateParts[0].trim(), dateParts[1].trim());
+        tasks.add(t);
+        return t;
     }
 
     /** Command interface logic */
     public static void command(String userInput) throws EricException{
         if (userInput.startsWith("todo")){
-            //String description = userInput.split(" ", 2)[1];
-            addTodo(userInput);
-            taskMsg();
+            Task t = addTodo(userInput);
+            taskMsg(t);
         } else if (userInput.startsWith("deadline")){
-            addDeadline(userInput);
-            taskMsg();
+            Task t = addDeadline(userInput);
+            taskMsg(t);
         } else if (userInput.startsWith("event")){
-            addEvent(userInput);
-            taskMsg();
+            Task t = addEvent(userInput);
+            taskMsg(t);
         } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
             setMarkUnmarked(userInput);
         } else if (userInput.equals("list")) {
