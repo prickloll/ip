@@ -106,9 +106,14 @@ public class Eric {
         linebreak();
     }
 
+
     /** Adds new todo task to tasks array */
-    public static void addTodo(String task_description) {
-        tasks[taskCount] = new Todo(task_description);
+    public static void addTodo(String userInput) throws EricException{
+        String[] descriptions = userInput.split(" ");
+        if (descriptions.length < 2) {
+            throw new EricException("The todo's description cannot be empty!");
+        }
+        tasks[taskCount] = new Todo(descriptions[1]);
         taskCount++;
     }
 
@@ -126,9 +131,9 @@ public class Eric {
 
     /** Command interface logic */
     public static void command(String userInput) throws EricException{
-        if (userInput.startsWith("todo ")){
-            String description = userInput.split(" ", 2)[1];
-            addTodo(description);
+        if (userInput.startsWith("todo")){
+            //String description = userInput.split(" ", 2)[1];
+            addTodo(userInput);
             taskMsg();
         } else if (userInput.startsWith("deadline ")){
             int firstSpace = userInput.indexOf(" ");
