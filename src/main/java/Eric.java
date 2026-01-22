@@ -23,32 +23,15 @@ public class Eric {
                 System.out.println("  Bye. Hope to see you again soon!");
                 linebreak();
                 break;
-            }  else if (userInput.startsWith("todo ")){
-                String description = userInput.split(" ", 2)[1];
-                addTodo(description);
-                taskMsg();
-            } else if (userInput.startsWith("deadline ")){
-                int firstSpace = userInput.indexOf(" ");
-                String[] descriptions = userInput.substring(firstSpace + 1).split(" /by ");
-                addDeadline(descriptions[0], descriptions[1]);
-                taskMsg();
-            } else if (userInput.startsWith("event ")){
-                int firstSpace = userInput.indexOf(" ");
-                String[] descriptions = userInput.substring(firstSpace + 1).split(" /");
-                addEvent(descriptions[0], descriptions[1], descriptions[2]);
-                taskMsg();
-            } else if (userInput.startsWith("mark ")) {
-                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
-                setMarked(taskIndex);
-            } else if (userInput.startsWith("unmark ")) {
-                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
-                setUnmarked(taskIndex);
-            } else if (userInput.equals("list")) {
-                listTask();
             }
-            else {
-                addTask(userInput);
+            try {
+                command(userInput);
+            } catch (EricException e) {
+                linebreak();
+                System.out.println(e.getMessage());
+                linebreak();
             }
+
         }
 
 
@@ -81,22 +64,37 @@ public class Eric {
         System.out.println(line);
     }
 
-    /** Marks a task as done and prints a confirmation message */
-    public static void setMarked(int index) {
-        tasks[index].markDone();
-        linebreak();
-        System.out.println("  Nice I've marked this task as done:");
-        System.out.println("    " + tasks[index].toString() + "\n");
-        linebreak();
-    }
+    /** Marks and unmarks a task and prints a confirmation message */
+    public static void setMarkUnmarked(String input) throws EricException{
+        try {
+            String[] inputs = input.split(" ");
+            if (inputs.length < 2) {
+                throw new EricException("Task number not specified!");
+            }
+            int index = Integer.parseInt(inputs[1]) - 1;
+            if (index < 0 || index >= taskCount) {
+                throw new EricException("Task number specified not in range of tasks available!");
+            }
+            if (inputs[0].equals("mark")) {
+                tasks[index].markDone();
+                linebreak();
+                System.out.println("  Nice I've marked this task as done:");
+                System.out.println("    " + tasks[index].toString());
+                linebreak();
 
-    /** Marks a task as undone and prints a confirmation message */
-    public static void setUnmarked(int index) {
-        tasks[index].markUndone();
-        linebreak();
-        System.out.println("  OK, I've marked this task as not done yet:");
-        System.out.println("    " + tasks[index].toString() + "/n");
-        linebreak();
+            } else {
+                tasks[index].markUndone();
+                linebreak();
+                System.out.println("  OK, I've marked this task as not done yet:");
+                System.out.println("    " + tasks[index].toString());
+                linebreak();
+            }
+
+        } catch (IllegalArgumentException e) {
+            throw new EricException("Enter a valid task number!");
+
+
+        }
     }
 
     /** Specialised message printing for specific task types */
@@ -124,6 +122,32 @@ public class Eric {
     public static void addEvent(String task_description, String from, String to) {
         tasks[taskCount] = new Event(task_description, from, to);
         taskCount++;
+    }
+
+    /** Command interface logic */
+    public static void command(String userInput) throws EricException{
+        if (userInput.startsWith("todo ")){
+            String description = userInput.split(" ", 2)[1];
+            addTodo(description);
+            taskMsg();
+        } else if (userInput.startsWith("deadline ")){
+            int firstSpace = userInput.indexOf(" ");
+            String[] descriptions = userInput.substring(firstSpace + 1).split(" /by ");
+            addDeadline(descriptions[0], descriptions[1]);
+            taskMsg();
+        } else if (userInput.startsWith("event ")){
+            int firstSpace = userInput.indexOf(" ");
+            String[] descriptions = userInput.substring(firstSpace + 1).split(" /");
+            addEvent(descriptions[0], descriptions[1], descriptions[2]);
+            taskMsg();
+        } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
+            setMarkUnmarked(userInput);
+        } else if (userInput.equals("list")) {
+            listTask();
+        }
+        else {
+            throw new EricException("Sorry, I can't seem to handle your request!");
+        }
     }
 
 }
