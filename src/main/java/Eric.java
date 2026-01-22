@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Eric {
     private static final Task[] tasks = new Task[100];
-    private static int task_count = 0;
+    private static int taskCount = 0;
 
     public static void main(String[] args) {
 
@@ -17,23 +17,23 @@ public class Eric {
 
         //Main execution loop
         while (true) {
-            String user_input = scanner.nextLine();
-            if (user_input.equals("bye")) {
+            String userInput = scanner.nextLine();
+            if (userInput.equals("bye")) {
                 linebreak();
                 System.out.println("  Bye. Hope to see you again soon!");
                 linebreak();
                 break;
-            }  else if (user_input.startsWith("mark ")) {
-                int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
-                setMarked(task_index);
-            } else if (user_input.startsWith("unmark ")) {
-                int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
-                setUnmarked(task_index);
-            } else if (user_input.equals("list")) {
+            }  else if (userInput.startsWith("mark ")) {
+                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                setMarked(taskIndex);
+            } else if (userInput.startsWith("unmark ")) {
+                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                setUnmarked(taskIndex);
+            } else if (userInput.equals("list")) {
                 listTask();
             }
             else {
-                addTask(user_input);
+                addTask(userInput);
             }
         }
 
@@ -42,8 +42,8 @@ public class Eric {
 
     /** Adds new task to tasks array */
     public static void addTask(String task_description) {
-        tasks[task_count] = new Task(task_description);
-        task_count++;
+        tasks[taskCount] = new Task(task_description);
+        taskCount++;
         linebreak();
         System.out.println("  added: " + task_description);
         linebreak();
@@ -54,7 +54,7 @@ public class Eric {
     public static void listTask() {
         linebreak();
         System.out.println("  Here are the tasks in your list:");
-        for (int i = 0; i < task_count; i++) {
+        for (int i = 0; i < taskCount; i++) {
             System.out.println("  " + (i+1) + ". " + tasks[i].toString());
         }
         linebreak();
