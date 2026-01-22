@@ -118,8 +118,16 @@ public class Eric {
     }
 
     /** Adds new deadline task to tasks array */
-    public static void addDeadline(String task_description, String date) {
-        tasks[taskCount] = new Deadline(task_description, date);
+    public static void addDeadline(String userInput) throws EricException {
+        if (!userInput.contains("/by")) {
+            throw new EricException("Missing /by after declaring a deadline task!");
+        }
+        int firstSpace = userInput.indexOf(" ");
+        String[] descriptions = userInput.substring(firstSpace + 1).split(" /by");
+        if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
+            throw new EricException("Missing deadline after /by!");
+        }
+        tasks[taskCount] = new Deadline(descriptions[0], descriptions[1]);
         taskCount++;
     }
 
@@ -135,10 +143,8 @@ public class Eric {
             //String description = userInput.split(" ", 2)[1];
             addTodo(userInput);
             taskMsg();
-        } else if (userInput.startsWith("deadline ")){
-            int firstSpace = userInput.indexOf(" ");
-            String[] descriptions = userInput.substring(firstSpace + 1).split(" /by ");
-            addDeadline(descriptions[0], descriptions[1]);
+        } else if (userInput.startsWith("deadline")){
+            addDeadline(userInput);
             taskMsg();
         } else if (userInput.startsWith("event ")){
             int firstSpace = userInput.indexOf(" ");
