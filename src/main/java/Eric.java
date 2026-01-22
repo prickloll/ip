@@ -25,18 +25,10 @@ public class Eric {
                 break;
             }  else if (user_input.startsWith("mark ")) {
                 int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
-                tasks[task_index].markDone();
-                linebreak();
-                System.out.println("  Nice I've marked this task as done:");
-                System.out.println("    " + tasks[task_index].toString() + "/n");
-                linebreak();
+                setMarked(task_index);
             } else if (user_input.startsWith("unmark ")) {
                 int task_index = Integer.parseInt(user_input.split(" ")[1]) - 1;
-                tasks[task_index].markUndone();
-                linebreak();
-                System.out.println("  OK, I've marked this task as not done yet:");
-                System.out.println("    " + tasks[task_index].toString() + "/n");
-                linebreak();
+                setUnmarked(task_index);
             } else if (user_input.equals("list")) {
                 listTask();
             }
@@ -58,11 +50,12 @@ public class Eric {
 
     }
 
-    /** list tasks  */
+    /** list tasks */
     public static void listTask() {
         linebreak();
+        System.out.println("  Here are the tasks in your list:");
         for (int i = 0; i < task_count; i++) {
-            System.out.println("  " + (i+1) + ". " + tasks[i]);
+            System.out.println("  " + (i+1) + ". " + tasks[i].toString());
         }
         linebreak();
     }
@@ -71,6 +64,24 @@ public class Eric {
     public static void linebreak() {
         String line = "---------------------------------";
         System.out.println(line);
+    }
+
+    /** Marks a task as done and prints a confirmation message */
+    public static void setMarked(int index) {
+        tasks[index].markDone();
+        linebreak();
+        System.out.println("  Nice I've marked this task as done:");
+        System.out.println("    " + tasks[index].toString() + "\n");
+        linebreak();
+    }
+
+    /** Marks a task as undone and prints a confirmation message */
+    public static void setUnmarked(int index) {
+        tasks[index].markUndone();
+        linebreak();
+        System.out.println("  OK, I've marked this task as not done yet:");
+        System.out.println("    " + tasks[index].toString() + "/n");
+        linebreak();
     }
 
 }
