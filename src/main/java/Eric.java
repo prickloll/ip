@@ -5,6 +5,8 @@ public class Eric {
     private static int task_count = 0;
 
     public static void main(String[] args) {
+
+        //Initial greeting logic
         linebreak();
         System.out.println("Hello! I'm Eric\nWhat can I do for you?");
         linebreak();
@@ -13,7 +15,7 @@ public class Eric {
         Scanner scanner = new Scanner(System.in);
 
 
-        //Main Execution loop
+        //Main execution loop
         while (true) {
             String user_input = scanner.nextLine();
             if (user_input.equals("bye")) {
