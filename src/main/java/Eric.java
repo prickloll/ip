@@ -1,14 +1,13 @@
 import java.util.Scanner;
 
 public class Eric {
-    private static String[] tasks = new String[100];
+    private static final String[] tasks = new String[100];
     private static int task_count = 0;
-    private static String line = "---------------------------------";
 
     public static void main(String[] args) {
-        System.out.println(line);
+        linebreak();
         System.out.println("Hello! I'm Eric\nWhat can I do for you?");
-        System.out.println(line);
+        linebreak();
 
         //For receiving inputs from the user
         Scanner scanner = new Scanner(System.in);
@@ -18,14 +17,15 @@ public class Eric {
         while (true) {
             String user_input = scanner.nextLine();
             if (user_input.equals("bye")) {
-                System.out.println(line);
+                linebreak();
                 System.out.println("  Bye. Hope to see you again soon!");
-                System.out.println(line);
+                linebreak();
                 break;
-            } else {
-                System.out.println(line);
+            }  else if (user_input.equals("list")) {
+                listTask();
+            }
+            else {
                 addTask(user_input);
-                System.out.println(line);
             }
         }
 
@@ -36,7 +36,25 @@ public class Eric {
     public static void addTask(String task) {
         tasks[task_count] = task;
         task_count++;
+        linebreak();
         System.out.println("  added: " + task);
+        linebreak();
 
     }
+
+    /** list tasks  */
+    public static void listTask() {
+        linebreak();
+        for (int i = 0; i < task_count; i++) {
+            System.out.println("  " + (i+1) + ". " + tasks[i]);
+        }
+        linebreak();
+    }
+
+    /** Print line for design */
+    public static void linebreak() {
+        String line = "---------------------------------";
+        System.out.println(line);
+    }
+
 }
