@@ -124,7 +124,7 @@ public class Eric {
         }
         int firstSpace = userInput.indexOf(" ");
         String[] descriptions = userInput.substring(firstSpace + 1).split(" /by");
-        if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
+        if (descriptions.length < 2 || descriptions[1].trim().isBlank()) {
             throw new EricException("Missing deadline after /by!");
         }
         tasks[taskCount] = new Deadline(descriptions[0], descriptions[1]);
@@ -132,8 +132,21 @@ public class Eric {
     }
 
     /** Adds new event task to tasks array */
-    public static void addEvent(String task_description, String from, String to) {
-        tasks[taskCount] = new Event(task_description, from, to);
+    public static void addEvent(String userInput) throws EricException{
+        if (!userInput.contains("/from") || !userInput.contains("/to")) {
+            throw new EricException("Event must have /from and /to identifiers!");
+
+        }
+        int firstSpace = userInput.indexOf(" ");
+        String[] descriptions = userInput.substring(firstSpace + 1).split(" /from", -1);
+        if (descriptions[0].trim().isEmpty()) {
+            throw new EricException("Event description is empty!");
+        }
+        String[] dateParts = descriptions[1].split(" /to", -1);
+        if (dateParts.length < 2 || dateParts[0].trim().isBlank() || dateParts[1].trim().isBlank()) {
+            throw new EricException("Event missing values after /from and /to!");
+        }
+        tasks[taskCount] = new Event(descriptions[0], dateParts[0].trim(), dateParts[1].trim());
         taskCount++;
     }
 
@@ -146,10 +159,8 @@ public class Eric {
         } else if (userInput.startsWith("deadline")){
             addDeadline(userInput);
             taskMsg();
-        } else if (userInput.startsWith("event ")){
-            int firstSpace = userInput.indexOf(" ");
-            String[] descriptions = userInput.substring(firstSpace + 1).split(" /");
-            addEvent(descriptions[0], descriptions[1], descriptions[2]);
+        } else if (userInput.startsWith("event")){
+            addEvent(userInput);
             taskMsg();
         } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
             setMarkUnmarked(userInput);
