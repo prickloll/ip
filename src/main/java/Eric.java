@@ -23,7 +23,21 @@ public class Eric {
                 System.out.println("  Bye. Hope to see you again soon!");
                 linebreak();
                 break;
-            }  else if (userInput.startsWith("mark ")) {
+            }  else if (userInput.startsWith("todo ")){
+                String description = userInput.split(" ", 2)[1];
+                addTodo(description);
+                taskMsg();
+            } else if (userInput.startsWith("deadline ")){
+                int firstSpace = userInput.indexOf(" ");
+                String[] descriptions = userInput.substring(firstSpace + 1).split(" /by ");
+                addDeadline(descriptions[0], descriptions[1]);
+                taskMsg();
+            } else if (userInput.startsWith("event ")){
+                int firstSpace = userInput.indexOf(" ");
+                String[] descriptions = userInput.substring(firstSpace + 1).split(" /");
+                addEvent(descriptions[0], descriptions[1], descriptions[2]);
+                taskMsg();
+            } else if (userInput.startsWith("mark ")) {
                 int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
                 setMarked(taskIndex);
             } else if (userInput.startsWith("unmark ")) {
@@ -62,7 +76,8 @@ public class Eric {
 
     /** Print line for design */
     public static void linebreak() {
-        String line = "---------------------------------";
+
+        String line = "----------------------------------------------------";
         System.out.println(line);
     }
 
@@ -82,6 +97,33 @@ public class Eric {
         System.out.println("  OK, I've marked this task as not done yet:");
         System.out.println("    " + tasks[index].toString() + "/n");
         linebreak();
+    }
+
+    /** Specialised message printing for specific task types */
+    public static void taskMsg() {
+        linebreak();
+        System.out.println(" Got it. I've added this task:");
+        System.out.println("    " + tasks[taskCount-1]);
+        System.out.println("  Now you have " + (taskCount) + " tasks in the list.");
+        linebreak();
+    }
+
+    /** Adds new todo task to tasks array */
+    public static void addTodo(String task_description) {
+        tasks[taskCount] = new Todo(task_description);
+        taskCount++;
+    }
+
+    /** Adds new deadline task to tasks array */
+    public static void addDeadline(String task_description, String date) {
+        tasks[taskCount] = new Deadline(task_description, date);
+        taskCount++;
+    }
+
+    /** Adds new event task to tasks array */
+    public static void addEvent(String task_description, String from, String to) {
+        tasks[taskCount] = new Event(task_description, from, to);
+        taskCount++;
     }
 
 }
