@@ -144,6 +144,29 @@ public class Eric {
         return t;
     }
 
+    /** Delete task from tasks array */
+    public static void deleteTask(String userInput) throws EricException{
+        String[] descriptions = userInput.split(" ");
+        if (descriptions.length < 2) {
+            throw new EricException("Task number for deletion not specified!");
+        }
+        try {
+            int index = Integer.parseInt(descriptions[1]) - 1;
+            Task removed = tasks.remove(index);
+            linebreak();
+            System.out.println("  Alright, I have deleted this task:");
+            System.out.println("    "+ removed);
+            System.out.println("  Currently you have " + tasks.size() + " tasks left!");
+            linebreak();
+        } catch (IllegalArgumentException e) {
+            throw new EricException("Enter a valid integer task number!");
+        } catch(IndexOutOfBoundsException e) {
+            throw new EricException("Task number specified not in range of tasks available!");
+        }
+
+
+    }
+
     /** Command interface logic */
     public static void command(String userInput) throws EricException{
         if (userInput.startsWith("todo")){
@@ -159,6 +182,8 @@ public class Eric {
             setMarkUnmarked(userInput);
         } else if (userInput.equals("list")) {
             listTask();
+        } else if (userInput.startsWith("delete")) {
+            deleteTask(userInput);
         }
         else {
             throw new EricException("Sorry, I can't seem to handle your request!");
