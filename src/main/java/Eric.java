@@ -24,7 +24,7 @@ public class Eric {
         }
 
         if (tasks.isEmpty()) {
-            ui.showMsg("  Configuring a new empty task list!");
+            ui.emptyListIndi();
         }
 
         ui.greeting();
@@ -56,12 +56,7 @@ public class Eric {
      * Lists all tasks currently in the task list.
      */
     public static void listTask() {
-        ui.linebreak();
-        ui.showMsg("  Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            ui.showMsg("  " + (i+1) + ". " + tasks.get(i));
-        }
-        ui.linebreak();
+        ui.displayTaskList(tasks);
     }
 
 
@@ -81,20 +76,13 @@ public class Eric {
             if (index < 0 || index >= tasks.size()) {
                 throw new EricException("Task number specified not in range of tasks available!");
             }
-            if (inputs[0].equals("mark")) {
+            boolean isMark = inputs[0].equals("mark");
+            if (isMark) {
                 tasks.get(index).markDone();
-                ui.linebreak();
-                ui.showMsg("  Nice I've marked this task as done:");
-                ui.showMsg("    " + tasks.get(index));
-                ui.linebreak();
-
             } else {
                 tasks.get(index).markUndone();
-                ui.linebreak();
-                ui.showMsg("  OK, I've marked this task as not done yet:");
-                ui.showMsg("    " + tasks.get(index));
-                ui.linebreak();
             }
+            ui.displayMarked(tasks.get(index), isMark);
 
         } catch (IllegalArgumentException e) {
             throw new EricException("Enter a valid task number!");
@@ -104,34 +92,20 @@ public class Eric {
     }
 
     /**
-     * Prints specialised message for specific task types.
-     *
-     * @params t The task that was included.
-     */
-    public static void taskMsg(Task t) {
-        ui.linebreak();
-        ui.showMsg(" Got it. I've added this task:");
-        ui.showMsg("    " + t);
-        ui.showMsg("  Now you have " + tasks.size() + " tasks in the list.");
-        ui.linebreak();
-    }
-
-
-    /**
      * Adds new todo task to the task list.
      *
      * @param userInput The input string from the user.
      * @return The Todo task created.
      * @throws EricException If the task description is empty.
      */
-    public static Task addTodo(String userInput) throws EricException {
+    public static void addTodo(String userInput) throws EricException {
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
             throw new EricException("The todo's description cannot be empty!");
         }
         Task t = new Todo(descriptions[1]);
         tasks.add(t);
-        return t;
+        ui.displayTaskAdded(t, tasks.size());
     }
 
     /**
@@ -141,7 +115,7 @@ public class Eric {
      * @return The Deadline task created.
      * @throws EricException If the task format is invalid or missing.
      */
-    public static Task addDeadline(String userInput) throws EricException {
+    public static void addDeadline(String userInput) throws EricException {
         if (!userInput.contains("/by")) {
             throw new EricException("Missing /by after declaring a deadline task!");
         }
@@ -152,7 +126,7 @@ public class Eric {
         }
         Task t = new Deadline(descriptions[0], descriptions[1]);
         tasks.add(t);
-        return t;
+        ui.displayTaskAdded(t, tasks.size());
     }
 
     /**
@@ -162,7 +136,7 @@ public class Eric {
      * @return The Event task created.
      * @throws EricException If the task format is invalid or missing.
      */
-    public static Task addEvent(String userInput) throws EricException {
+    public static void addEvent(String userInput) throws EricException {
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new EricException("Event must have /from and /to identifiers!");
 
@@ -178,7 +152,7 @@ public class Eric {
         }
         Task t = new Event(descriptions[0], dateParts[0].trim(), dateParts[1].trim());
         tasks.add(t);
-        return t;
+        ui.displayTaskAdded(t, tasks.size());
     }
 
     /**
@@ -195,11 +169,7 @@ public class Eric {
         try {
             int index = Integer.parseInt(descriptions[1]) - 1;
             Task removed = tasks.remove(index);
-            ui.linebreak();
-            ui.showMsg("  Alright, I have deleted this task:");
-            ui.showMsg("    "+ removed);
-            ui.showMsg("  Currently you have " + tasks.size() + " tasks left!");
-            ui.linebreak();
+            ui.displayDeleted(removed, tasks.size());
         } catch (IllegalArgumentException e) {
             throw new EricException("Enter a valid integer task number!");
         } catch(IndexOutOfBoundsException e) {
@@ -220,19 +190,17 @@ public class Eric {
         }
         try {
             LocalDate intDate = LocalDate.parse(dateParts[1].trim());
-            ui.linebreak();
-            ui.showMsg("  This is the list of tasks on "
-                    + intDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+            ArrayList<Task> results = new ArrayList<>();
             for (Task t : tasks) {
                 if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)){
-                    ui.showMsg("    " + t);
+                    results.add(t);
                 } else if (t instanceof Event
                         && (intDate.isAfter(((Event) t).from) || intDate.isEqual(((Event) t).from))
                         && (intDate.isBefore(((Event) t).to) || intDate.isEqual(((Event) t).to))){
-                    ui.showMsg("    " + t);
+                    results.add(t);
                 }
             }
-            ui.linebreak();
+            ui.displaySearch(results, intDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
         } catch (DateTimeParseException e) {
             throw new EricException("  Please use yyyy-MM-dd as the date format!");
         }
@@ -246,14 +214,11 @@ public class Eric {
      */
     public static void command(String userInput) throws EricException{
         if (userInput.startsWith("todo")){
-            Task t = addTodo(userInput);
-            taskMsg(t);
+            addTodo(userInput);
         } else if (userInput.startsWith("deadline")){
-            Task t = addDeadline(userInput);
-            taskMsg(t);
+            addDeadline(userInput);
         } else if (userInput.startsWith("event")){
-            Task t = addEvent(userInput);
-            taskMsg(t);
+            addEvent(userInput);
         } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
             setMarkUnmarked(userInput);
         } else if (userInput.equals("list")) {
