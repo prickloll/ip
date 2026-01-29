@@ -1,7 +1,9 @@
+package eric.task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
+import eric.EricException;
 /**
  * Represents a deadline task that can be configured with a deadline.
  */

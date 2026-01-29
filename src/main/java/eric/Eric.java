@@ -1,3 +1,10 @@
+package eric;
+import eric.ui.Ui;
+import eric.repository.Repository;
+import eric.task.TaskList;
+import eric.parser.Parser;
+import eric.task.Task;
+
 public class Eric {
     private static Repository repo;
     private static TaskList tasks;
@@ -14,7 +21,7 @@ public class Eric {
         try {
             tasks = new TaskList(repo.load());
         } catch (EricException e) {
-            ui.errorMsg("  " + e.getMessage());
+            ui.emptyListIndi();
             tasks = new TaskList();
         }
     }

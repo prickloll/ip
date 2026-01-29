@@ -1,6 +1,7 @@
-import java.time.format.DateTimeFormatter;
+package eric.ui;
 import java.util.Scanner;
 import java.util.ArrayList;
+import eric.task.Task;
 
 /** Handles all user interaction */
 public class Ui {

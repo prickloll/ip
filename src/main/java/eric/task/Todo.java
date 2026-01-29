@@ -1,3 +1,4 @@
+package eric.task;
 /** Represents a todo task without any date or time constaa. */
 public class Todo extends Task {
     /**

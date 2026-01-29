@@ -1,6 +1,11 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+package eric.parser;
+import eric.ui.Ui;
+import eric.repository.Repository;
+import eric.task.TaskList;
+import eric.EricException;
+import eric.task.Task;
 import java.util.ArrayList;
+
 
 public class Parser {
     public static boolean parse(String userInput, TaskList tasks, Ui ui, Repository repo) throws EricException {
@@ -21,7 +26,7 @@ public class Parser {
         } else if (userInput.equals("list")) {
             ui.displayTaskList(tasks.getEveryTask());
         } else if (userInput.startsWith("delete")) {
-            ui.displayTaskAdded(tasks.deleteTask(userInput), tasks.getSize());
+            ui.displayDeleted(tasks.deleteTask(userInput), tasks.getSize());
         } else if (userInput.startsWith("find")) {
             ArrayList<Task> results = tasks.findTasksByDate(userInput);
             ui.displaySearch(results, userInput.split(" ")[1]);

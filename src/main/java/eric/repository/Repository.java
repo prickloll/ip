@@ -1,3 +1,5 @@
+package eric.repository;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,6 +7,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import eric.task.Task;
+import eric.EricException;
 
 /**
  * Manages the loading and saving of task data to text file

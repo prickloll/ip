@@ -1,6 +1,8 @@
+package eric.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import eric.EricException;
 
 /**
  * Represents an event task that can be configured with a start and end date
