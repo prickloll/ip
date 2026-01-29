@@ -1,10 +1,12 @@
 package eric;
-import eric.ui.Ui;
+import eric.parser.Parser;
 import eric.repository.Repository;
 import eric.task.TaskList;
-import eric.parser.Parser;
-import eric.task.Task;
+import eric.ui.Ui;
 
+/**
+ * Main entry point for Eric chatbot.
+ */
 public class Eric {
     private static Repository repo;
     private static TaskList tasks;
@@ -13,7 +15,7 @@ public class Eric {
     /**
      * Initialises the bot and load existing tasks if any.
      *
-     * @param filePath Path to the text file. 
+     * @param filePath Path to the text file.
      */
     public Eric(String filePath) {
         ui = new Ui();
@@ -26,6 +28,9 @@ public class Eric {
         }
     }
 
+    /**
+     * Starts the main execution for Eric
+     */
     public void run() {
         ui.greeting();
         boolean isExit = false;

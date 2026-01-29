@@ -2,6 +2,7 @@ package eric.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
 import eric.EricException;
 
 /**
@@ -22,7 +23,7 @@ public class Event extends Task {
         super(description);
         try {
             this.from = LocalDate.parse(from.trim());
-            this.to =  LocalDate.parse(to.trim());
+            this.to = LocalDate.parse(to.trim());
         } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }

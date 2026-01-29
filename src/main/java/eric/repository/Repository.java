@@ -1,14 +1,15 @@
 package eric.repository;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import eric.task.Task;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import eric.EricException;
+import eric.task.Task;
+
 
 /**
  * Manages the loading and saving of task data to text file
@@ -68,11 +69,11 @@ public class Repository {
 
         try {
             Scanner s = new Scanner(f);
-            while(s.hasNext()) {
+            while (s.hasNext()) {
                 fileTasks.add(Task.fileToTask(s.nextLine()));
             }
         } catch (IOException e) {
-            throw new EricException("Met with error tryting to load the file!");
+            throw new EricException("Met with error trying to load the file!");
         }
         return fileTasks;
     }
