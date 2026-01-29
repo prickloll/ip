@@ -1,48 +1,46 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 public class Eric {
-    private static Repository repo  = new Repository("./data/Eric.txt");
+    private static Repository repo;
     private static TaskList tasks;
     private static Ui ui;
-    
+
     /**
-     * Starts the chatbot and handles the main execution loop.
+     * Initialises the bot and load existing tasks if any.
      *
-     * @param args Command-line arguments.
+     * @param filePath Path to the text file. 
      */
-    public static void main(String[] args) {
+    public Eric(String filePath) {
         ui = new Ui();
+        repo = new Repository(filePath);
         try {
             tasks = new TaskList(repo.load());
         } catch (EricException e) {
             ui.errorMsg("  " + e.getMessage());
             tasks = new TaskList();
         }
+    }
 
-        if (tasks.isEmpty()) {
-            ui.emptyListIndi();
-        }
-
+    public void run() {
         ui.greeting();
+        boolean isExit = false;
+        while (!isExit) {
 
-        Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
-        while (!exit) {
-            String userInput = scanner.nextLine();
             try {
-                exit = Parser.parse(userInput, tasks, ui, repo);
+                String userInput = ui.readInput();
+                isExit = Parser.parse(userInput, tasks, ui, repo);
 
             } catch (EricException e) {
-                ui.linebreak();
                 ui.errorMsg(e.getMessage());
-                ui.linebreak();
             }
 
         }
+    }
+    /**
+     * Starts the chatbot and handles the main execution loop.
+     *
+     * @param args Command-line arguments.
+     */
+    public static void main(String[] args) {
+        new Eric("./data/Eric.txt").run();
     }
 
 }
