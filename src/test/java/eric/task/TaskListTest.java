@@ -15,7 +15,7 @@ public class TaskListTest {
     }
 
     @Test
-    public void deleteTask_vinalidIndex_exceptionThrown() {
+    public void deleteTask_validIndex_exceptionThrown() {
         try {
             new TaskList().deleteTask("delete 100");
             fail();
