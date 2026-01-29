@@ -2,20 +2,33 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Eric {
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static Repository repo  = new Repository("./data/Eric.txt");
+    private static ArrayList<Task> tasks;
 
+    /**
+     * Starts the chatbot and handles the main execution loop.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
 
-        //Initial greeting logic
+        try {
+            tasks = repo.load();
+        } catch (EricException e) {
+            System.out.println("  " + e.getMessage());
+            tasks = new ArrayList<>();
+        }
+
+        if (tasks.isEmpty()) {
+            System.out.println("  Configuring a new empty task list!");
+        }
+
         linebreak();
         System.out.println("Hello! I'm Eric\nWhat can I do for you?");
         linebreak();
 
-        //For receiving inputs from the user
         Scanner scanner = new Scanner(System.in);
 
-
-        //Main execution loop
         while (true) {
             String userInput = scanner.nextLine();
             if (userInput.equals("bye")) {
@@ -26,6 +39,7 @@ public class Eric {
             }
             try {
                 command(userInput);
+                repo.save(tasks);
             } catch (EricException e) {
                 linebreak();
                 System.out.println(e.getMessage());
@@ -38,7 +52,9 @@ public class Eric {
     }
 
 
-    /** list tasks */
+    /**
+     * Lists all tasks currently in the task list.
+     */
     public static void listTask() {
         linebreak();
         System.out.println("  Here are the tasks in your list:");
@@ -48,14 +64,21 @@ public class Eric {
         linebreak();
     }
 
-    /** Print line for design */
+    /**
+     * Print a line for design in the console.
+     */
     public static void linebreak() {
 
         String line = "----------------------------------------------------";
         System.out.println(line);
     }
 
-    /** Marks and unmarks a task and prints a confirmation message */
+    /**
+     * Marks and unmarks a task and prints a confirmation message.
+     *
+     * @params input The command containing the task number.
+     * @throws EricException If the index is invalid or missing.
+     */
     public static void setMarkUnmarked(String input) throws EricException{
         try {
             String[] inputs = input.split(" ");
@@ -88,7 +111,11 @@ public class Eric {
         }
     }
 
-    /** Specialised message printing for specific task types */
+    /**
+     * Prints specialised message for specific task types.
+     *
+     * @params t The task that was included.
+     */
     public static void taskMsg(Task t) {
         linebreak();
         System.out.println(" Got it. I've added this task:");
@@ -98,7 +125,13 @@ public class Eric {
     }
 
 
-    /** Adds new todo task to tasks array */
+    /**
+     * Adds new todo task to the task list.
+     *
+     * @param userInput The input string from the user.
+     * @return The Todo task created.
+     * @throws EricException If the task description is empty.
+     */
     public static Task addTodo(String userInput) throws EricException{
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
@@ -109,7 +142,13 @@ public class Eric {
         return t;
     }
 
-    /** Adds new deadline task to tasks array */
+    /**
+     * Adds new deadline task to task list.
+     *
+     * @param userInput The input string containing the task description and /by.
+     * @return The Deadline task created.
+     * @throws EricException If the task format is invalid or missing.
+     */
     public static Task addDeadline(String userInput) throws EricException {
         if (!userInput.contains("/by")) {
             throw new EricException("Missing /by after declaring a deadline task!");
@@ -124,7 +163,13 @@ public class Eric {
         return t;
     }
 
-    /** Adds new event task to tasks array */
+    /**
+     * Adds new event task to task list.
+     *
+     * @param userInput The input string containing the task description, /from and /to.
+     * @return The Event task created.
+     * @throws EricException If the task format is invalid or missing.
+     */
     public static Task addEvent(String userInput) throws EricException{
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new EricException("Event must have /from and /to identifiers!");
@@ -144,7 +189,12 @@ public class Eric {
         return t;
     }
 
-    /** Delete task from tasks array */
+    /**
+     * Removes a task from the task list based on the task number given.
+     *
+     * @param userInput The task number to delete.
+     * @throws EricException If the task number is out of bounds or invalid.
+     */
     public static void deleteTask(String userInput) throws EricException{
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
@@ -167,7 +217,12 @@ public class Eric {
 
     }
 
-    /** Command interface logic */
+    /**
+     * Matches the user input to the appropriate task action.
+     *
+     * @param userInput The text entered by the user.
+     * @throws EricException If the command or its relevant parameters are invalid.
+     */
     public static void command(String userInput) throws EricException{
         if (userInput.startsWith("todo")){
             Task t = addTodo(userInput);
