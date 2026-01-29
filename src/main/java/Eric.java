@@ -2,9 +2,20 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Eric {
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static Repository repo  = new Repository("./data/Eric.txt");
+    private static ArrayList<Task> tasks;
 
     public static void main(String[] args) {
+
+        //Load existing task list
+        try {
+            tasks = repo.load();
+        } catch (EricException e) {
+
+            //Empty task list created if file corrupted or not found
+            System.out.println("  A new task list has been configured");
+            tasks = new ArrayList<>();
+        }
 
         //Initial greeting logic
         linebreak();
@@ -26,6 +37,7 @@ public class Eric {
             }
             try {
                 command(userInput);
+                repo.save(tasks);
             } catch (EricException e) {
                 linebreak();
                 System.out.println(e.getMessage());

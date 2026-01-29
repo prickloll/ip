@@ -29,11 +29,11 @@ public class Task {
     }
 
     public String toFileFormat() {
-        return (isDone ? "1" : "0" + " | " + description);
+        return (isDone ? "1" : "0") + " | " + description;
     }
 
     public static Task fileToTask(String line) throws EricException {
-        String[] lineParts = line.split("\\| ",  -1);
+        String[] lineParts = line.split(" \\| ",  -1);
         if (lineParts.length < 3) {
             throw new EricException("File might be corrupted!");
         }
