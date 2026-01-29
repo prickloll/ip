@@ -1,6 +1,8 @@
+package eric.task;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import eric.EricException;
 
 /** Manages relevant task operations */
 public class TaskList {

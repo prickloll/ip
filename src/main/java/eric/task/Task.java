@@ -1,3 +1,6 @@
+package eric.task;
+import eric.EricException;
+
 /** Represents a task that can be marked as completed or not */
 public class Task {
     protected String description;
