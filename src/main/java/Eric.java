@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Eric {
     private static Repository repo  = new Repository("./data/Eric.txt");
@@ -79,7 +82,7 @@ public class Eric {
      * @params input The command containing the task number.
      * @throws EricException If the index is invalid or missing.
      */
-    public static void setMarkUnmarked(String input) throws EricException{
+    public static void setMarkUnmarked(String input) throws EricException {
         try {
             String[] inputs = input.split(" ");
             if (inputs.length < 2) {
@@ -132,7 +135,7 @@ public class Eric {
      * @return The Todo task created.
      * @throws EricException If the task description is empty.
      */
-    public static Task addTodo(String userInput) throws EricException{
+    public static Task addTodo(String userInput) throws EricException {
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
             throw new EricException("The todo's description cannot be empty!");
@@ -170,7 +173,7 @@ public class Eric {
      * @return The Event task created.
      * @throws EricException If the task format is invalid or missing.
      */
-    public static Task addEvent(String userInput) throws EricException{
+    public static Task addEvent(String userInput) throws EricException {
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new EricException("Event must have /from and /to identifiers!");
 
@@ -195,7 +198,7 @@ public class Eric {
      * @param userInput The task number to delete.
      * @throws EricException If the task number is out of bounds or invalid.
      */
-    public static void deleteTask(String userInput) throws EricException{
+    public static void deleteTask(String userInput) throws EricException {
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
             throw new EricException("Task number for deletion not specified!");
@@ -214,7 +217,36 @@ public class Eric {
             throw new EricException("Task number specified not in range of tasks available!");
         }
 
+    }
 
+    /**
+     * Displays task of a specific date that was specified.
+     *
+     * @param date The date string must be provided in the yyyy-MM-dd format.
+     */
+    public static void findDate(String date) throws EricException {
+        String[] dateParts = date.split(" ");
+        if (dateParts.length < 2) {
+            throw new EricException("  Please specify a date you want to search for!");
+        }
+        try {
+            LocalDate intDate = LocalDate.parse(dateParts[1].trim());
+            linebreak();
+            System.out.println("  This is the list of tasks on "
+                    + intDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+            for (Task t : tasks) {
+                if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)){
+                    System.out.println("    " + t);
+                } else if (t instanceof Event
+                        && (intDate.isAfter(((Event) t).from) || intDate.isEqual(((Event) t).from))
+                        && (intDate.isBefore(((Event) t).to) || intDate.isEqual(((Event) t).to))){
+                    System.out.println("    " + t);
+                }
+            }
+            linebreak();
+        } catch (DateTimeParseException e) {
+            throw new EricException("  Please use yyyy-MM-dd as the date format!");
+        }
     }
 
     /**
@@ -239,6 +271,8 @@ public class Eric {
             listTask();
         } else if (userInput.startsWith("delete")) {
             deleteTask(userInput);
+        } else if (userInput.startsWith("find")) {
+            findDate(userInput);
         }
         else {
             throw new EricException("Sorry, I can't seem to handle your request!");

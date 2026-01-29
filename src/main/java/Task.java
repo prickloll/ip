@@ -78,7 +78,7 @@ public class Task {
             default:
                 return null;
         }
-        if(isDone) {
+        if (isDone) {
             currTask.markDone();
         }
         return currTask;

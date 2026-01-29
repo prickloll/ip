@@ -1,23 +1,31 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Represents a deadline task that can be configured with a deadline.
  */
 public class Deadline extends Task {
-    protected String by;
+    protected LocalDate by;
 
     /**
      * Initialises a Deadline task with a description and deadline.
      *
      * @param description The description of the task.
-     * @param by The time and/or date the task has to be completed.
+     * @param by The deadline in yyyy-MM-dd format
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by) throws EricException {
         super(description);
-        this.by = by;
+        try {
+            this.by = LocalDate.parse(by.trim());
+        } catch(DateTimeParseException e) {
+            throw new EricException("Enter the date in the yyyy-MM-dd format please!");
+        }
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by:" + by + ")";
+        return "[D]" + super.toString() + " (by:" + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 
     /**
@@ -26,6 +34,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileFormat() {
-        return "D | " + super.toFileFormat();
+        return "D | " + super.toFileFormat() + " | " + by;
     }
 }
