@@ -16,7 +16,7 @@ public class Event extends Task {
      * @param from The start time and/or date of the event.
      * @param to The end time and/or date of the event.
      */
-    public Event(String description, String from, String to) throws EricException{
+    public Event(String description, String from, String to) throws EricException {
         super(description);
         try {
             this.from = LocalDate.parse(from.trim());
