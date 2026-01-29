@@ -66,17 +66,17 @@ public class Task {
 
         Task currTask;
         switch(taskType) {
-            case "T":
-                currTask = new Todo(description);
-                break;
-            case "D":
-                currTask = new Deadline(description, lineParts[3]);
-                break;
-            case "E":
-                currTask = new Event(description, lineParts[3], lineParts[4]);
-                break;
-            default:
-                return null;
+        case "T":
+            currTask = new Todo(description);
+            break;
+        case "D":
+            currTask = new Deadline(description, lineParts[3]);
+            break;
+        case "E":
+            currTask = new Event(description, lineParts[3], lineParts[4]);
+            break;
+        default:
+            return null;
         }
         if (isDone) {
             currTask.markDone();
