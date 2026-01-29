@@ -6,8 +6,21 @@ import eric.EricException;
 import eric.task.Task;
 import java.util.ArrayList;
 
-
+/**
+ * Logic for interpreting user input and executing appropriate bot actions.
+ */
 public class Parser {
+
+    /**
+     * Takes in the user input and executes the corresponding command.
+     *
+     * @param userInput The input given by the user.
+     * @param tasks The TaskList object to be modified or queried against.
+     * @param ui The user interface object handling the bot's display.
+     * @param repo The repository object for data storage.
+     * @return true if the terminating command, "bye" is given.
+     * @throws EricException If the input is invalid or if any part of the program fails.
+     */
     public static boolean parse(String userInput, TaskList tasks, Ui ui, Repository repo) throws EricException {
         if (userInput.equals("bye")) {
             ui.bye();
