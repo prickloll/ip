@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 public class Eric {
     private static Repository repo  = new Repository("./data/Eric.txt");
     private static ArrayList<Task> tasks;
+    private static Ui ui;
 
     /**
      * Starts the chatbot and handles the main execution loop.
@@ -14,39 +15,35 @@ public class Eric {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-
+        ui = new Ui();
         try {
             tasks = repo.load();
         } catch (EricException e) {
-            System.out.println("  " + e.getMessage());
+            ui.errorMsg("  " + e.getMessage());
             tasks = new ArrayList<>();
         }
 
         if (tasks.isEmpty()) {
-            System.out.println("  Configuring a new empty task list!");
+            ui.showMsg("  Configuring a new empty task list!");
         }
 
-        linebreak();
-        System.out.println("Hello! I'm Eric\nWhat can I do for you?");
-        linebreak();
+        ui.greeting();
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             String userInput = scanner.nextLine();
             if (userInput.equals("bye")) {
-                linebreak();
-                System.out.println("  Bye. Hope to see you again soon!");
-                linebreak();
+                ui.bye();
                 break;
             }
             try {
                 command(userInput);
                 repo.save(tasks);
             } catch (EricException e) {
-                linebreak();
-                System.out.println(e.getMessage());
-                linebreak();
+                ui.linebreak();
+                ui.errorMsg(e.getMessage());
+                ui.linebreak();
             }
 
         }
@@ -59,22 +56,14 @@ public class Eric {
      * Lists all tasks currently in the task list.
      */
     public static void listTask() {
-        linebreak();
-        System.out.println("  Here are the tasks in your list:");
+        ui.linebreak();
+        ui.showMsg("  Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("  " + (i+1) + ". " + tasks.get(i));
+            ui.showMsg("  " + (i+1) + ". " + tasks.get(i));
         }
-        linebreak();
+        ui.linebreak();
     }
 
-    /**
-     * Print a line for design in the console.
-     */
-    public static void linebreak() {
-
-        String line = "----------------------------------------------------";
-        System.out.println(line);
-    }
 
     /**
      * Marks and unmarks a task and prints a confirmation message.
@@ -94,17 +83,17 @@ public class Eric {
             }
             if (inputs[0].equals("mark")) {
                 tasks.get(index).markDone();
-                linebreak();
-                System.out.println("  Nice I've marked this task as done:");
-                System.out.println("    " + tasks.get(index));
-                linebreak();
+                ui.linebreak();
+                ui.showMsg("  Nice I've marked this task as done:");
+                ui.showMsg("    " + tasks.get(index));
+                ui.linebreak();
 
             } else {
                 tasks.get(index).markUndone();
-                linebreak();
-                System.out.println("  OK, I've marked this task as not done yet:");
-                System.out.println("    " + tasks.get(index));
-                linebreak();
+                ui.linebreak();
+                ui.showMsg("  OK, I've marked this task as not done yet:");
+                ui.showMsg("    " + tasks.get(index));
+                ui.linebreak();
             }
 
         } catch (IllegalArgumentException e) {
@@ -120,11 +109,11 @@ public class Eric {
      * @params t The task that was included.
      */
     public static void taskMsg(Task t) {
-        linebreak();
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("    " + t);
-        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
-        linebreak();
+        ui.linebreak();
+        ui.showMsg(" Got it. I've added this task:");
+        ui.showMsg("    " + t);
+        ui.showMsg("  Now you have " + tasks.size() + " tasks in the list.");
+        ui.linebreak();
     }
 
 
@@ -206,11 +195,11 @@ public class Eric {
         try {
             int index = Integer.parseInt(descriptions[1]) - 1;
             Task removed = tasks.remove(index);
-            linebreak();
-            System.out.println("  Alright, I have deleted this task:");
-            System.out.println("    "+ removed);
-            System.out.println("  Currently you have " + tasks.size() + " tasks left!");
-            linebreak();
+            ui.linebreak();
+            ui.showMsg("  Alright, I have deleted this task:");
+            ui.showMsg("    "+ removed);
+            ui.showMsg("  Currently you have " + tasks.size() + " tasks left!");
+            ui.linebreak();
         } catch (IllegalArgumentException e) {
             throw new EricException("Enter a valid integer task number!");
         } catch(IndexOutOfBoundsException e) {
@@ -231,19 +220,19 @@ public class Eric {
         }
         try {
             LocalDate intDate = LocalDate.parse(dateParts[1].trim());
-            linebreak();
-            System.out.println("  This is the list of tasks on "
+            ui.linebreak();
+            ui.showMsg("  This is the list of tasks on "
                     + intDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
             for (Task t : tasks) {
                 if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)){
-                    System.out.println("    " + t);
+                    ui.showMsg("    " + t);
                 } else if (t instanceof Event
                         && (intDate.isAfter(((Event) t).from) || intDate.isEqual(((Event) t).from))
                         && (intDate.isBefore(((Event) t).to) || intDate.isEqual(((Event) t).to))){
-                    System.out.println("    " + t);
+                    ui.showMsg("    " + t);
                 }
             }
-            linebreak();
+            ui.linebreak();
         } catch (DateTimeParseException e) {
             throw new EricException("  Please use yyyy-MM-dd as the date format!");
         }
