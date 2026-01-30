@@ -40,7 +40,7 @@ public class Parser {
             ui.displayTaskList(tasks.getEveryTask());
         } else if (userInput.startsWith("delete")) {
             ui.displayDeleted(tasks.deleteTask(userInput), tasks.getSize());
-        } else if (userInput.startsWith("find")) {
+        } else if (userInput.startsWith("finddate")) {
             ArrayList<Task> results = tasks.findTasksByDate(userInput);
             ui.displaySearch(results, userInput.split(" ")[1]);
         }
