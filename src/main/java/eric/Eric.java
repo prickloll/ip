@@ -38,7 +38,9 @@ public class Eric {
 
             try {
                 String userInput = ui.readInput();
-                isExit = Parser.parse(userInput, tasks, ui, repo);
+                eric.command.Command c = Parser.parse(userInput);
+                c.execute(tasks, ui, repo);
+                isExit = c.isExit();
 
             } catch (EricException e) {
                 ui.errorMsg(e.getMessage());

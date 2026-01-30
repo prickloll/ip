@@ -133,7 +133,6 @@ public class Ui {
      * Displays the search results.
      *
      * @param results The list of tasks that match the search.
-     * @param date The formatted date string.
      */
     public void displaySearch(ArrayList<Task> results, String display) {
         linebreak();
