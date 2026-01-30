@@ -154,7 +154,7 @@ public class TaskList {
      * @throws EricException If the date format is inaccurate.
      */
     public ArrayList<Task> findTasksByDate(String userInput) throws EricException{
-        String[] descriptions  = userInput.split(" ");
+        String[] descriptions  = userInput.split(" ", 2);
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the date you want to search for!");
         }
@@ -174,6 +174,30 @@ public class TaskList {
         } catch (DateTimeParseException e) {
             throw new EricException(("Use yyyy-MM-dd as the date format!"));
         }
+
+    }
+    /**
+     * Finds task based on given keyword.
+     *
+     * @param userInput The user's keyword to search for.
+     * @return The list of tasks that matches the given keyword.
+     * @throws EricException If the keyword is not specified.
+     */
+    public ArrayList<Task> findTasksByKeyword(String userInput) throws EricException{
+        String[] descriptions  = userInput.split(" ", 2);
+        if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
+            throw new EricException("Please specify the keyword you want to search for!");
+        }
+
+        String keyword = descriptions[1].toLowerCase();
+        ArrayList<Task> results = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.getDescription().toLowerCase().contains(keyword)) {
+                results.add(t);
+            }
+        }
+        return results;
+
 
     }
 

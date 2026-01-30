@@ -44,6 +44,10 @@ public class Parser {
             ArrayList<Task> results = tasks.findTasksByDate(userInput);
             ui.displaySearch(results, userInput.split(" ")[1]);
         }
+        else if (userInput.startsWith("find")) {
+            ArrayList<Task> results = tasks.findTasksByKeyword(userInput);
+            ui.displaySearch(results, "keyword: " + userInput.split(" ")[1]);
+        }
         else {
             throw new EricException("Sorry, I can't seem to handle your request!");
         }
