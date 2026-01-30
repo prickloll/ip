@@ -1,11 +1,15 @@
 package eric.parser;
-import java.util.ArrayList;
-
 import eric.EricException;
-import eric.repository.Repository;
-import eric.task.Task;
-import eric.task.TaskList;
-import eric.ui.Ui;
+import eric.command.AddDeadlineCommand;
+import eric.command.AddEventCommand;
+import eric.command.AddTodoCommand;
+import eric.command.Command;
+import eric.command.DeleteCommand;
+import eric.command.ExitCommand;
+import eric.command.FindCommand;
+import eric.command.FindDateCommand;
+import eric.command.ListCommand;
+import eric.command.MarkCommand;
 
 /**
  * Main logic for taking care of user inputs and calls the appropriate action.
@@ -14,44 +18,30 @@ public class Parser {
     /**
      * Takes in the user input and execute corresponding commands.
      * @param userInput The string given by the user.
-     * @param tasks The list of task to be modified or queried against.
-     * @param ui The user interface for bot display.
-     * @param repo The storage for the modified task list.
-     * @return true if the application terminates, false otherwise.
+     * @return Command Returns the command object corresponding to the user input.
      * @throws EricException If the commands or parameters are invalid.
      */
-    public static boolean parse(String userInput, TaskList tasks, Ui ui, Repository repo) throws EricException {
+    public static Command parse(String userInput) throws EricException {
         if (userInput.equals("bye")) {
-            ui.bye();
-            return true;
-        }
-
-        if (userInput.startsWith("todo")) {
-            ui.displayTaskAdded(tasks.addTodo(userInput), tasks.getSize());
+            return new ExitCommand();
+        } else if (userInput.startsWith("todo")) {
+            return new AddTodoCommand(userInput);
         } else if (userInput.startsWith("deadline")) {
-            ui.displayTaskAdded(tasks.addDeadline(userInput), tasks.getSize());
+            return new AddDeadlineCommand(userInput);
         } else if (userInput.startsWith("event")) {
-            ui.displayTaskAdded(tasks.addEvent(userInput), tasks.getSize());
+            return new AddEventCommand(userInput);
         } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
-            boolean isMark = userInput.startsWith("mark");
-            ui.displayMarked(tasks.setMarkUnmarked(userInput), isMark);
+            return new MarkCommand(userInput);
         } else if (userInput.equals("list")) {
-            ui.displayTaskList(tasks.getEveryTask());
+            return new ListCommand();
         } else if (userInput.startsWith("delete")) {
-            ui.displayDeleted(tasks.deleteTask(userInput), tasks.getSize());
+            return new DeleteCommand(userInput);
         } else if (userInput.startsWith("finddate")) {
-            ArrayList<Task> results = tasks.findTasksByDate(userInput);
-            ui.displaySearch(results, userInput.split(" ")[1]);
-        }
-        else if (userInput.startsWith("find")) {
-            ArrayList<Task> results = tasks.findTasksByKeyword(userInput);
-            ui.displaySearch(results, "keyword: " + userInput.split(" ")[1]);
-        }
-        else {
+            return new FindDateCommand(userInput);
+        } else if (userInput.startsWith("find")) {
+            return new FindCommand(userInput);
+        } else {
             throw new EricException("Sorry, I can't seem to handle your request!");
         }
-
-        repo.save(tasks.getEveryTask());
-        return false;
     }
 }
