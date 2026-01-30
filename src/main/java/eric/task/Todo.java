@@ -1,12 +1,13 @@
 package eric.task;
-/** Represents a todo task without any date or time constaa. */
+
+/** Represents a todo task without any date or time. */
 public class Todo extends Task {
     /**
      * Initialises a Todo task with the given description.
      *
      * @param description The description of the task.
      */
-    public Todo (String description) {
+    public Todo(String description) {
         super(description);
     }
 

@@ -1,6 +1,7 @@
 package eric.ui;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import eric.task.Task;
 
 /** Handles all user interaction */
@@ -23,6 +24,9 @@ public class Ui {
         return scanner.nextLine().trim();
     }
 
+    /**
+     * Prints the line break.
+     */
     public void linebreak() {
         String line = "----------------------------------------------------";
         System.out.println(line);
@@ -102,7 +106,7 @@ public class Ui {
     public void displayDeleted(Task t, int size) {
         linebreak();
         System.out.println("  Alright, I have deleted this task:");
-        System.out.println("    "+ t);
+        System.out.println("    " + t);
         System.out.println("  Currently you have " + size + " tasks left!");
         linebreak();
     }
@@ -119,7 +123,7 @@ public class Ui {
         } else {
             System.out.println("  Here are the tasks in your list:");
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println("  " + (i+1) + ". " + tasks.get(i));
+                System.out.println("  " + (i + 1) + ". " + tasks.get(i));
             }
         }
         linebreak();

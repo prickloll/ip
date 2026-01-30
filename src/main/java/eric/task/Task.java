@@ -58,7 +58,7 @@ public class Task {
      * @throws EricException If the line format is invalid or corrupted.
      */
     public static Task fileToTask(String line) throws EricException {
-        String[] lineParts = line.split(" \\| ",  -1);
+        String[] lineParts = line.split(" \\| ", -1);
         if (lineParts.length < 3) {
             throw new EricException("File might be corrupted!");
         }

@@ -1,7 +1,8 @@
 package eric.task;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.time.LocalDate;
+
 import eric.EricException;
 
 /** Manages relevant task operations */
@@ -9,7 +10,7 @@ public class TaskList {
     private final ArrayList<Task> tasks;
 
     /**
-     * Initilises the TaskList object with a list of tasks.
+     * Initialises the TaskList object with a list of tasks.
      *
      * @param tasks The task list given.
      */
@@ -153,8 +154,8 @@ public class TaskList {
      * @return The list of tasks that matches the given date.
      * @throws EricException If the date format is inaccurate.
      */
-    public ArrayList<Task> findTasksByDate(String userInput) throws EricException{
-        String[] descriptions  = userInput.split(" ");
+    public ArrayList<Task> findTasksByDate(String userInput) throws EricException {
+        String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the date you want to search for!");
         }
@@ -162,11 +163,11 @@ public class TaskList {
             LocalDate intDate = LocalDate.parse(descriptions[1].trim());
             ArrayList<Task> results = new ArrayList<>();
             for (Task t : tasks) {
-                if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)){
+                if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)) {
                     results.add(t);
                 } else if (t instanceof Event
                         && (intDate.isAfter(((Event) t).from) || intDate.isEqual(((Event) t).from))
-                        && (intDate.isBefore(((Event) t).to) || intDate.isEqual(((Event) t).to))){
+                        && (intDate.isBefore(((Event) t).to) || intDate.isEqual(((Event) t).to))) {
                     results.add(t);
                 }
             }
@@ -183,9 +184,5 @@ public class TaskList {
 
     public ArrayList<Task> getEveryTask() {
         return tasks;
-    }
-
-    public boolean isEmpty() {
-        return tasks.isEmpty();
     }
 }

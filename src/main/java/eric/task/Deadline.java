@@ -3,6 +3,7 @@ package eric.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
 import eric.EricException;
 /**
  * Represents a deadline task that can be configured with a deadline.
@@ -20,7 +21,7 @@ public class Deadline extends Task {
         super(description);
         try {
             this.by = LocalDate.parse(by.trim());
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }
     }
