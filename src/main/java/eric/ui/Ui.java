@@ -135,12 +135,12 @@ public class Ui {
      * @param results The list of tasks that match the search.
      * @param date The formatted date string.
      */
-    public void displaySearch(ArrayList<Task> results, String date) {
+    public void displaySearch(ArrayList<Task> results, String display) {
         linebreak();
         if (results.isEmpty()) {
-            System.out.println("  No tasks on " + date);
+            System.out.println("  No tasks on " + display);
         } else {
-            System.out.println("  This is the list of tasks on " + date + ":");
+            System.out.println("  This is the list of tasks for " + display + ":");
             for (Task t : results) {
                 System.out.println("    " + t);
             }
