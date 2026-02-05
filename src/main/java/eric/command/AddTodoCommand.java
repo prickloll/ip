@@ -2,6 +2,7 @@ package eric.command;
 
 import eric.EricException;
 import eric.repository.Repository;
+import eric.task.Task;
 import eric.task.TaskList;
 import eric.ui.Ui;
 
@@ -21,8 +22,9 @@ public class AddTodoCommand extends Command {
      * Specific to adding and storing a todo task.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ui.displayTaskAdded(tasks.addTodo(description), tasks.getSize());
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        Task addedTask = tasks.addTodo(description);
         repo.save(tasks.getEveryTask());
+        return ui.displayTaskAdded(addedTask, tasks.getSize());
     }
 }

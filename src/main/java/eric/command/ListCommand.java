@@ -16,7 +16,7 @@ public class ListCommand extends Command {
      * Specific to listing the tasks.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ui.displayTaskList(tasks.getEveryTask());
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        return ui.displayTaskList(tasks.getEveryTask());
     }
 }
