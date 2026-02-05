@@ -2,6 +2,7 @@ package eric.command;
 
 import eric.EricException;
 import eric.repository.Repository;
+import eric.task.Task;
 import eric.task.TaskList;
 import eric.ui.Ui;
 
@@ -21,9 +22,10 @@ public class MarkCommand extends Command {
      * Specific to marking or unmarking a task.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         boolean isMark = description.startsWith("mark");
-        ui.displayMarked(tasks.setMarkUnmarked(description), isMark);
+        Task markTask = tasks.setMarkUnmarked(description);
         repo.save(tasks.getEveryTask());
+        return ui.displayMarked(markTask, isMark);
     }
 }

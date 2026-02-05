@@ -24,8 +24,8 @@ public class FindCommand extends Command {
      * Specific to finding a task via a description.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         ArrayList<Task> results = tasks.findTasksByKeyword(description);
-        ui.displaySearch(results, "keyword: " + description.split(" ")[1]);
+        return ui.displaySearch(results, "keyword: " + description.split(" ")[1]);
     }
 }

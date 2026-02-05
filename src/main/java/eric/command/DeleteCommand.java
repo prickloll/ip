@@ -2,6 +2,7 @@ package eric.command;
 
 import eric.EricException;
 import eric.repository.Repository;
+import eric.task.Task;
 import eric.task.TaskList;
 import eric.ui.Ui;
 
@@ -21,8 +22,9 @@ public class DeleteCommand extends Command {
      * Specific to deleting a task.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ui.displayDeleted(tasks.deleteTask(description), tasks.getSize());
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        Task removedTask = tasks.deleteTask(description);
         repo.save(tasks.getEveryTask());
+        return ui.displayDeleted(removedTask, tasks.getSize());
     }
 }

@@ -24,8 +24,8 @@ public class FindDateCommand extends Command {
      * Specific to finding a task via a deadline.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         ArrayList<Task> results = tasks.findTasksByDate(description);
-        ui.displaySearch(results, description.split(" ")[1]);
+        return ui.displaySearch(results, description.split(" ")[1]);
     }
 }
