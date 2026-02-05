@@ -93,15 +93,15 @@ public class Ui {
         if (tasks.isEmpty()) {
             return "The task list is currently empty!";
         } else {
-            StringBuilder TaskList = new StringBuilder("Here are the tasks in your list:\n");
+            StringBuilder taskList = new StringBuilder("Here are the tasks in your list:\n");
 
             for (int i = 0; i < tasks.size(); i++) {
-                TaskList.append(i + 1).append(". ").append(tasks.get(i));
+                taskList.append(i + 1).append(". ").append(tasks.get(i));
                 if (i < tasks.size() - 1) {
-                    TaskList.append("\n");
+                    taskList.append("\n");
                 }
             }
-            return TaskList.toString();
+            return taskList.toString();
         }
 
     }
@@ -116,15 +116,15 @@ public class Ui {
         if (results.isEmpty()) {
             return "No tasks on " + display;
         } else {
-            StringBuilder TaskList = new StringBuilder("This is the list of tasks for " + display + ":");
+            StringBuilder taskList = new StringBuilder("This is the list of tasks for " + display + ":");
 
             for (int i = 0; i < results.size(); i++) {
-                TaskList.append(" ").append(results.get(i));
+                taskList.append(" ").append(results.get(i));
                 if (i < results.size() - 1) {
-                    TaskList.append("\n");
+                    taskList.append("\n");
                 }
             }
-            return TaskList.toString();
+            return taskList.toString();
         }
     }
 

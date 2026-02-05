@@ -13,6 +13,8 @@ public class Eric {
     private static TaskList tasks;
     private static Ui ui;
 
+    private String startMessage = "";
+
     public Eric() {
         this("./data/Eric.txt");
     }
@@ -27,7 +29,7 @@ public class Eric {
         try {
             tasks = new TaskList(repo.load());
         } catch (EricException e) {
-            ui.emptyListIndi();
+            startMessage = ui.emptyListIndi();
             tasks = new TaskList();
         }
     }
@@ -54,7 +56,11 @@ public class Eric {
      * @return The greeting message.
      */
     public String getGreeting() {
-        return ui.greeting();
+        if (startMessage.isEmpty()) {
+            return ui.greeting();
+        } else {
+            return ui.greeting() + "\nNote: " + startMessage;
+        }
     }
     public static void main(String[] args) {
         System.out.println("Hello!");
