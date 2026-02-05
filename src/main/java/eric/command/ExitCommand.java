@@ -16,8 +16,8 @@ public class ExitCommand extends Command {
      * Specific to exiting the program.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ui.bye();
+    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        return ui.bye();
     }
 
     @Override

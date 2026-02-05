@@ -1,69 +1,45 @@
 package eric.ui;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import eric.task.Task;
 
 /** Handles all user interaction */
 public class Ui {
-    private final Scanner scanner;
-
-    /**
-     * Initialises the Ui object with a Scanner.
-     */
-    public Ui() {
-        this.scanner = new Scanner(System.in);
-    }
-
-    /**
-     * Reads the next line of user input.
-     *
-     * @return The line that was read.
-     */
-    public String readInput() {
-        return scanner.nextLine().trim();
-    }
-
-    /**
-     * Prints the line break.
-     */
-    public void linebreak() {
-        String line = "----------------------------------------------------";
-        System.out.println(line);
-    }
-
     /**
      * Displays the empty list message.
+     *
+     * @return The empty list message.
      */
-    public void emptyListIndi() {
-        System.out.println("  Configuring a new empty task list!");
+    public String emptyListIndi() {
+        return "Configuring a new empty task list!";
     }
 
     /**
      * Displays the greeting message.
+     *
+     * @return The greeting message.
      */
-    public void greeting() {
-        linebreak();
-        System.out.println("Hello! I'm Eric\nWhat can I do for you?");
-        linebreak();
+    public String greeting() {
+        return "Hello! I'm Eric\nWhat can I do for you?";
     }
 
     /**
      * Displays the goodbye message.
+     *
+     * @return The goodbye message.
      */
-    public void bye() {
-        linebreak();
-        System.out.println("  Bye. Hope to see you again soon!");
-        linebreak();
+    public String bye() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
      * Shows the error message.
      *
      * @param message The error message to display.
+     * @return The error message.
      */
-    public void errorMsg(String message) {
-        System.out.println(message);
+    public String errorMsg(String message) {
+        return message;
     }
 
     /**
@@ -71,13 +47,11 @@ public class Ui {
      *
      * @param t The task being added.
      * @param size The size of the task list currently.
+     * @return The task list with the new added task.
      */
-    public void displayTaskAdded(Task t, int size) {
-        linebreak();
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("    " + t);
-        System.out.println("  Now you have " + size + " tasks in the list.");
-        linebreak();
+    public String displayTaskAdded(Task t, int size) {
+        return "Got it. I've added this task:\n" + t + "\n"
+                + "Now you have " + size + " tasks in the list.";
     }
 
     /**
@@ -85,16 +59,16 @@ public class Ui {
      *
      * @param t The task being marked or unmarked.
      * @param isDone The marked status.
+     * @return The task that was marked.
      */
-    public void displayMarked(Task t, boolean isDone) {
-        linebreak();
+    public String displayMarked(Task t, boolean isDone) {
+        String status;
         if (isDone) {
-            System.out.println("  Nice I've marked this task as done:");
+            status = "Nice I've marked this task as done:";
         } else {
-            System.out.println("  OK, I've marked this task as not done yet:");
+            status = "OK, I've marked this task as not done yet:";
         }
-        System.out.println("    " + t);
-        linebreak();
+        return status + "\n" + t;
     }
 
     /**
@@ -102,49 +76,56 @@ public class Ui {
      *
      * @param t The task being removed.
      * @param size The remaining task list size.
+     * @return The message when a task is removed and the remaining task list.
      */
-    public void displayDeleted(Task t, int size) {
-        linebreak();
-        System.out.println("  Alright, I have deleted this task:");
-        System.out.println("    " + t);
-        System.out.println("  Currently you have " + size + " tasks left!");
-        linebreak();
+    public String displayDeleted(Task t, int size) {
+        return "Alright, I have deleted this task:\n" + t + "\n"
+                + "Currently you have " + size + " tasks left!";
     }
 
     /**
      * Displays the list of tasks.
      *
      * @param tasks The list of tasks to display.
+     * @return The task list.
      */
-    public void displayTaskList(ArrayList<Task> tasks) {
-        linebreak();
+    public String displayTaskList(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
-            System.out.println("  The task list is currently empty!");
+            return "The task list is currently empty!";
         } else {
-            System.out.println("  Here are the tasks in your list:");
+            StringBuilder TaskList = new StringBuilder("Here are the tasks in your list:\n");
+
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println("  " + (i + 1) + ". " + tasks.get(i));
+                TaskList.append(i + 1).append(". ").append(tasks.get(i));
+                if (i < tasks.size() - 1) {
+                    TaskList.append("\n");
+                }
             }
+            return TaskList.toString();
         }
-        linebreak();
+
     }
 
     /**
      * Displays the search results.
      *
      * @param results The list of tasks that match the search.
+     * @return The task list that matches the search result.
      */
-    public void displaySearch(ArrayList<Task> results, String display) {
-        linebreak();
+    public String displaySearch(ArrayList<Task> results, String display) {
         if (results.isEmpty()) {
-            System.out.println("  No tasks on " + display);
+            return "No tasks on " + display;
         } else {
-            System.out.println("  This is the list of tasks for " + display + ":");
-            for (Task t : results) {
-                System.out.println("    " + t);
+            StringBuilder TaskList = new StringBuilder("This is the list of tasks for " + display + ":");
+
+            for (int i = 0; i < results.size(); i++) {
+                TaskList.append(" ").append(results.get(i));
+                if (i < results.size() - 1) {
+                    TaskList.append("\n");
+                }
             }
+            return TaskList.toString();
         }
-        linebreak();
     }
 
 

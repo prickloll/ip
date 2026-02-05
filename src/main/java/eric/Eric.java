@@ -1,4 +1,5 @@
 package eric;
+import eric.command.Command;
 import eric.parser.Parser;
 import eric.repository.Repository;
 import eric.task.TaskList;
@@ -12,6 +13,9 @@ public class Eric {
     private static TaskList tasks;
     private static Ui ui;
 
+    public Eric() {
+        this("./data/Eric.txt");
+    }
     /**
      * Initialises the bot and load existing tasks if any.
      *
@@ -29,32 +33,31 @@ public class Eric {
     }
 
     /**
-     * Starts the main execution for Eric
+     * Generates a response based on user input.
+     *
+     * @param input The input given by the user.
+     * @return The response to the user input.
      */
-    public void run() {
-        ui.greeting();
-        boolean isExit = false;
-        while (!isExit) {
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input);
+            return c.execute(tasks, ui, repo);
 
-            try {
-                String userInput = ui.readInput();
-                eric.command.Command c = Parser.parse(userInput);
-                c.execute(tasks, ui, repo);
-                isExit = c.isExit();
-
-            } catch (EricException e) {
-                ui.errorMsg(e.getMessage());
-            }
-
+        } catch (EricException e) {
+            return ui.errorMsg(e.getMessage());
         }
     }
+
     /**
-     * Starts the chatbot and handles the main execution loop.
+     * Generates the greeting message for the bot.
      *
-     * @param args Command-line arguments.
+     * @return The greeting message.
      */
+    public String getGreeting() {
+        return ui.greeting();
+    }
     public static void main(String[] args) {
-        new Eric("./data/Eric.txt").run();
+        System.out.println("Hello!");
     }
 
 }
