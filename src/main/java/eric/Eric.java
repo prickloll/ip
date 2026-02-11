@@ -32,6 +32,10 @@ public class Eric {
             startMessage = ui.emptyListIndi();
             tasks = new TaskList();
         }
+
+        assert tasks != null : "Task List should be initialised even if loading from the .txt file fails.";
+        assert ui != null : "Ui should be initialised.";
+        assert repo != null : "Repository should be initialised.";
     }
 
     /**
@@ -41,6 +45,7 @@ public class Eric {
      * @return The response to the user input.
      */
     public String getResponse(String input) {
+        assert input != null : "Input to eric should not be null";
         try {
             Command c = Parser.parse(input);
             return c.execute(tasks, ui, repo);

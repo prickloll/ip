@@ -17,6 +17,9 @@ public class ListCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        assert tasks != null : "Command cannot execute with null tasks being passed.";
+        assert ui != null : "Command cannot execute with null ui being passed.";
+        assert repo != null : "Command cannot execute with null repo being passed.";
         return ui.displayTaskList(tasks.getEveryTask());
     }
 }

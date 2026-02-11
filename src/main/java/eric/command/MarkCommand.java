@@ -23,6 +23,9 @@ public class MarkCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        assert tasks != null : "Command cannot execute with null tasks being passed.";
+        assert ui != null : "Command cannot execute with null ui being passed.";
+        assert repo != null : "Command cannot execute with null repo being passed.";
         boolean isMark = description.startsWith("mark");
         Task markTask = tasks.setMarkUnmarked(description);
         repo.save(tasks.getEveryTask());

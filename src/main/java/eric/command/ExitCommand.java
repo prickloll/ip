@@ -20,8 +20,4 @@ public class ExitCommand extends Command {
         return ui.bye();
     }
 
-    @Override
-    public boolean isExit() {
-        return true;
-    }
 }

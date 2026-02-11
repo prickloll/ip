@@ -22,26 +22,30 @@ public class Parser {
      * @throws EricException If the commands or parameters are invalid.
      */
     public static Command parse(String userInput) throws EricException {
+        assert userInput != null : "User input passed to parser cannot be null";
+        Command command;
         if (userInput.equals("bye")) {
-            return new ExitCommand();
+            command = new ExitCommand();
         } else if (userInput.startsWith("todo")) {
-            return new AddTodoCommand(userInput);
+            command = new AddTodoCommand(userInput);
         } else if (userInput.startsWith("deadline")) {
-            return new AddDeadlineCommand(userInput);
+            command = new AddDeadlineCommand(userInput);
         } else if (userInput.startsWith("event")) {
-            return new AddEventCommand(userInput);
+            command = new AddEventCommand(userInput);
         } else if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
-            return new MarkCommand(userInput);
+            command = new MarkCommand(userInput);
         } else if (userInput.equals("list")) {
-            return new ListCommand();
+            command = new ListCommand();
         } else if (userInput.startsWith("delete")) {
-            return new DeleteCommand(userInput);
+            command = new DeleteCommand(userInput);
         } else if (userInput.startsWith("finddate")) {
-            return new FindDateCommand(userInput);
+            command = new FindDateCommand(userInput);
         } else if (userInput.startsWith("find")) {
-            return new FindCommand(userInput);
+            command = new FindCommand(userInput);
         } else {
             throw new EricException("Sorry, I can't seem to handle your request!");
         }
+        assert command != null : "Parser failed to create a Command object for valid input";
+        return command;
     }
 }

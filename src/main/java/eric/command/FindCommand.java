@@ -25,6 +25,9 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
+        assert tasks != null : "Command cannot execute with null tasks being passed.";
+        assert ui != null : "Command cannot execute with null ui being passed.";
+        assert repo != null : "Command cannot execute with null repo being passed.";
         ArrayList<Task> results = tasks.findTasksByKeyword(description);
         return ui.displaySearch(results, "keyword: " + description.split(" ")[1]);
     }

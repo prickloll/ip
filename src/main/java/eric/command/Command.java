@@ -20,8 +20,4 @@ public abstract class Command {
      * @throws EricException If an error occurs during command execution.
      */
     public abstract String execute(TaskList tasks, Ui ui, Repository repo) throws EricException;
-
-    public boolean isExit() {
-        return false;
-    }
 }
