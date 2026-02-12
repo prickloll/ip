@@ -26,6 +26,7 @@ public class FindDateCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         ArrayList<Task> results = tasks.findTasksByDate(description);
+        assert results != null : "Search results list should be initialised even if it is empty.";
         String dateQuery = extractDateQuery();
         return ui.displaySearch(results, dateQuery);
     }

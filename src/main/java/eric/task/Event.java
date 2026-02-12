@@ -39,13 +39,17 @@ public class Event extends Task {
         try {
             this.from = LocalDate.parse(from.trim());
             this.to = LocalDate.parse(to.trim());
+            assert this.from != null && this.to != null : "Event from and to must not be null.";
         } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }
+
+
     }
 
     @Override
     public String toString() {
+        assert this.from != null && this.to != null : "Event  from and to must not be null.";
         return EVENT_TASK_SYMBOL + super.toString() + " (from: "
                 + from.format(DateTimeFormatter.ofPattern(DATE_OUTPUT_PATTERN))
                 + " to: " + to.format(DateTimeFormatter.ofPattern(DATE_OUTPUT_PATTERN)) + ")";
@@ -57,6 +61,7 @@ public class Event extends Task {
      */
     @Override
     public String toFileFormat() {
+        assert from != null && to != null : "Event  from and to must not be null.";
         return FILE_EVENT_SYMBOL + " | " + super.toFileFormat() + " | " + this.from + " | " + this.to;
     }
 }

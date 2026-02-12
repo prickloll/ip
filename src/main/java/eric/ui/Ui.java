@@ -45,41 +45,43 @@ public class Ui {
     /**
      * Displays a message when a task is being added.
      *
-     * @param t The task being added.
+     * @param task The task being added.
      * @param size The size of the task list currently.
      * @return The task list with the new added task.
      */
-    public String displayTaskAdded(Task t, int size) {
-        return "Got it. I've added this task:\n" + t + "\n"
+    public String displayTaskAdded(Task task, int size) {
+        assert task != null : "Ui recieved a null task to display";
+        assert size >= 0 : "Task list cannot be negative";
+        return "Got it. I've added this task:\n" + task + "\n"
                 + "Now you have " + size + " tasks in the list.";
     }
 
     /**
      * Displays a message when a task is marked or unmarked.
      *
-     * @param t The task being marked or unmarked.
+     * @param task The task being marked or unmarked.
      * @param isDone The marked status.
      * @return The task that was marked.
      */
-    public String displayMarked(Task t, boolean isDone) {
+    public String displayMarked(Task task, boolean isDone) {
         String status;
         if (isDone) {
             status = "Nice I've marked this task as done:";
         } else {
             status = "OK, I've marked this task as not done yet:";
         }
-        return status + "\n" + t;
+        return status + "\n" + task;
     }
 
     /**
      * Displays a message when a task is removed.
      *
-     * @param t The task being removed.
+     * @param task The task being removed.
      * @param size The remaining task list size.
      * @return The message when a task is removed and the remaining task list.
      */
-    public String displayDeleted(Task t, int size) {
-        return "Alright, I have deleted this task:\n" + t + "\n"
+    public String displayDeleted(Task task, int size) {
+        return "Alright, I have deleted this task:\n" + task + "\n"
                 + "Currently you have " + size + " tasks left!";
     }
 

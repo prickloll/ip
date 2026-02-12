@@ -23,6 +23,7 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+        assert tasks.isEmpty() : "A newly initialised task list should be empty";
     }
 
     /**
@@ -35,7 +36,9 @@ public class TaskList {
     public Task addTodo(String userInput) throws EricException {
         String description = toDoDescription(userInput, "The todo's description cannot be empty!");
         Task t = new Todo(description);
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
     /**
@@ -49,7 +52,9 @@ public class TaskList {
         checkFormat(userInput, "Missing /by after declaring a deadline task!", "/by");
         String[] deadlineParts = tidyDeadlineParts(userInput);
         Task t = new Deadline(deadlineParts[0], deadlineParts[1]);
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
 
@@ -64,7 +69,9 @@ public class TaskList {
         checkFormat(userInput, "Event must have /from and /to identifiers!", "/from", "/to");
         String[] descriptions = tidyEventParts(userInput);
         Task t = new Event(descriptions[0], descriptions[1].trim(), descriptions[2].trim());
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
 
@@ -106,6 +113,7 @@ public class TaskList {
         LocalDate searchDate = decipherSearchDate(userInput);
         ArrayList<Task> results = new ArrayList<>();
         for (Task task : tasks) {
+            assert task != null : "Task object cannot be null here";
             if (withinDateRange(task, searchDate)) {
                 results.add(task);
             }
@@ -123,6 +131,7 @@ public class TaskList {
         String keyword = decipherSearchWord(userInput);
         ArrayList<Task> results = new ArrayList<>();
         for (Task task : tasks) {
+            assert task != null : "Task object cannot be null here";
             if (task.getDescription().toLowerCase().contains(keyword)) {
                 results.add(task);
             }

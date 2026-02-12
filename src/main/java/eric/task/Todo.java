@@ -15,6 +15,7 @@ public class Todo extends Task {
 
     @Override
     public String toString() {
+        assert this.description != null : "Todo description cannot be null during display.";
         return TODO_TASK_SYMBOL + super.toString();
     }
 
@@ -24,6 +25,7 @@ public class Todo extends Task {
      */
     @Override
     public String toFileFormat() {
+        assert this.description != null : "Todo description must be present for file storage.";
         return FILE_TODO_SYMBOL + " | " + super.toFileFormat();
     }
 }

@@ -27,6 +27,7 @@ public class FindCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         ArrayList<Task> results = tasks.findTasksByKeyword(description);
+        assert results != null : "Search results list should be initialised even if it is empty.";
         String searchCriteria = extractSearchCriteria();
         return ui.displaySearch(results, searchCriteria);
     }
@@ -38,6 +39,6 @@ public class FindCommand extends Command {
      */
     private String extractSearchCriteria() {
         String keyword = description.split(" ")[1];
-        return SEARCH_PREFIX + keyword;
+        return SEARCH_PREFIX + keyword.trim();
     }
 }

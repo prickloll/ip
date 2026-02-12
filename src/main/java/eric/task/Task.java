@@ -54,6 +54,7 @@ public class Task {
      * @return String representation of task to be saved
      */
     public String toFileFormat() {
+        assert description != null : "Task description cannot be null";
         String status = isDone ? DONE_STATUS : NOT_DONE_STATUS;
         return status + " | " + description;
     }
@@ -67,7 +68,7 @@ public class Task {
      * @throws EricException If the line format is invalid or corrupted.
      */
     public static Task fileToTask(String line) throws EricException {
-        String[] lineParts = line.split(DELIMITER_PATTERN, -1);
+        String[] lineParts = line.split(" \\| ", -1);
         if (lineParts.length < 3) {
             throw new EricException("File might be corrupted!");
         }
@@ -99,6 +100,7 @@ public class Task {
         default:
             throw new EricException("Unknown task type found in data file: " + taskType);
         }
+        assert currTask != null : "Task object should have been created.";
         if (isDone) {
             currTask.markDone();
         }

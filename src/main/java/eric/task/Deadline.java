@@ -42,6 +42,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
+        checkInternalState();
         return DEADLINE_TASK_SYMBOL + super.toString() + " (by: "
                 + by.format(DateTimeFormatter.ofPattern(DATE_OUTPUT_PATTERN)) + ")";
     }
@@ -52,6 +53,15 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileFormat() {
+        checkInternalState();
         return FILE_DEADLINE_SYMBOL + " | " + super.toFileFormat() + " | " + by;
+    }
+
+    /**
+     * Checks the internal state of the deadline task object
+     */
+    private void checkInternalState() {
+        assert this.by != null : "Deadline 'by' date should not be null.";
+        assert this.description != null : "Description should not be null here.";
     }
 }

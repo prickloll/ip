@@ -24,6 +24,7 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         Task removedTask = tasks.deleteTask(description);
+        assert removedTask != null : "Task should have been successfully removed and returned.";
         saveTasks(tasks, repo);
         return ui.displayDeleted(removedTask, tasks.getSize());
     }

@@ -39,6 +39,7 @@ public class Repository {
     private void writeTasksToFile(ArrayList<Task> tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         for (Task task : tasks) {
+            assert task != null : "Cannot save a null object into the task list.";
             fw.write(task.toFileFormat() + System.lineSeparator());
         }
         fw.close();
@@ -89,4 +90,6 @@ public class Repository {
         }
         return loadTasksFromFile(dataFile);
     }
+
+
 }
