@@ -19,9 +19,4 @@ public class ExitCommand extends Command {
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         return ui.bye();
     }
-
-    @Override
-    public boolean isExit() {
-        return true;
-    }
 }

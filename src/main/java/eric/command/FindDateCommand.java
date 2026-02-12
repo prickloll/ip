@@ -26,6 +26,16 @@ public class FindDateCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         ArrayList<Task> results = tasks.findTasksByDate(description);
-        return ui.displaySearch(results, description.split(" ")[1]);
+        String dateQuery = extractDateQuery();
+        return ui.displaySearch(results, dateQuery);
+    }
+
+    /**
+     * Extract the date string from the user input.
+     *
+     * @return The date string extracted.
+     */
+    private String extractDateQuery() {
+        return description.split(" ")[1];
     }
 }
