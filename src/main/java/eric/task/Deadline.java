@@ -9,6 +9,9 @@ import eric.EricException;
  * Represents a deadline task that can be configured with a deadline.
  */
 public class Deadline extends Task {
+    private static final String DATE_OUTPUT_PATTERN = "MMM d yyyy";
+    private static final String DEADLINE_TASK_SYMBOL = "[D]";
+    private static final String FILE_DEADLINE_SYMBOL = "D";
     protected LocalDate by;
 
     /**
@@ -19,8 +22,19 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) throws EricException {
         super(description);
+        this.by = parseDate(by);
+    }
+
+    /**
+     * Parse dateString into an actual LocalDate object.
+     *
+     * @param dateString The date string given.
+     * @return A LocalDate object.
+     * @throws EricException The deadline is in the wrong format or not valid.
+     */
+    private LocalDate parseDate(String dateString) throws EricException {
         try {
-            this.by = LocalDate.parse(by.trim());
+            return LocalDate.parse(dateString.trim());
         } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }
@@ -28,7 +42,8 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+        return DEADLINE_TASK_SYMBOL + super.toString() + " (by: "
+                + by.format(DateTimeFormatter.ofPattern(DATE_OUTPUT_PATTERN)) + ")";
     }
 
     /**
@@ -37,6 +52,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileFormat() {
-        return "D | " + super.toFileFormat() + " | " + by;
+        return FILE_DEADLINE_SYMBOL + " | " + super.toFileFormat() + " | " + by;
     }
 }

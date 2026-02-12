@@ -3,6 +3,11 @@ import eric.EricException;
 
 /** Represents a task that can be marked as completed or not */
 public class Task {
+    private static final String COMPLETE_INDICATOR = "X";
+    private static final String INCOMPLETE_INDICATOR = " ";
+    private static final String DONE_STATUS = "1";
+    private static final String NOT_DONE_STATUS = "0";
+    private static final String DELIMITER_PATTERN = " \\| ";
     protected String description;
     protected boolean isDone;
 
@@ -22,7 +27,7 @@ public class Task {
 
     public String getStatusIcon() {
         // Mark done task with X
-        return (isDone ? "X" : " ");
+        return isDone ? COMPLETE_INDICATOR : INCOMPLETE_INDICATOR;
     }
     /**
      * Marks the task as complete.
@@ -49,7 +54,8 @@ public class Task {
      * @return String representation of task to be saved
      */
     public String toFileFormat() {
-        return (isDone ? "1" : "0") + " | " + description;
+        String status = isDone ? DONE_STATUS : NOT_DONE_STATUS;
+        return status + " | " + description;
     }
 
     /**
@@ -61,11 +67,20 @@ public class Task {
      * @throws EricException If the line format is invalid or corrupted.
      */
     public static Task fileToTask(String line) throws EricException {
-        String[] lineParts = line.split(" \\| ", -1);
+        String[] lineParts = line.split(DELIMITER_PATTERN, -1);
         if (lineParts.length < 3) {
             throw new EricException("File might be corrupted!");
         }
+        return createDesiredTask(lineParts);
+    }
 
+    /**
+     * Helper function to create task object.
+     * @param lineParts The string array pertaining to a task.
+     * @return A task object.
+     * @throws EricException If an unknown task type is found.
+     */
+    private static Task createDesiredTask(String[] lineParts) throws EricException {
         String taskType = lineParts[0];
         boolean isDone = lineParts[1].equals("1");
         String description = lineParts[2];
@@ -82,7 +97,7 @@ public class Task {
             currTask = new Event(description, lineParts[3], lineParts[4]);
             break;
         default:
-            return null;
+            throw new EricException("Unknown task type found in data file: " + taskType);
         }
         if (isDone) {
             currTask.markDone();

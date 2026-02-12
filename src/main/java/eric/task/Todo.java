@@ -2,6 +2,8 @@ package eric.task;
 
 /** Represents a todo task without any date or time. */
 public class Todo extends Task {
+    private static final String TODO_TASK_SYMBOL = "[T]";
+    private static final String FILE_TODO_SYMBOL = "T";
     /**
      * Initialises a Todo task with the given description.
      *
@@ -13,7 +15,7 @@ public class Todo extends Task {
 
     @Override
     public String toString() {
-        return "[T]" + super.toString();
+        return TODO_TASK_SYMBOL + super.toString();
     }
 
     /**
@@ -22,6 +24,6 @@ public class Todo extends Task {
      */
     @Override
     public String toFileFormat() {
-        return "T | " + super.toFileFormat();
+        return FILE_TODO_SYMBOL + " | " + super.toFileFormat();
     }
 }

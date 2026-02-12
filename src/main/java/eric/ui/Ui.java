@@ -92,18 +92,9 @@ public class Ui {
     public String displayTaskList(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
             return "The task list is currently empty!";
-        } else {
-            StringBuilder taskList = new StringBuilder("Here are the tasks in your list:\n");
-
-            for (int i = 0; i < tasks.size(); i++) {
-                taskList.append(i + 1).append(". ").append(tasks.get(i));
-                if (i < tasks.size() - 1) {
-                    taskList.append("\n");
-                }
-            }
-            return taskList.toString();
         }
-
+        String heading = "Here are the tasks in your list:\n";
+        return heading + formatTaskList(tasks);
     }
 
     /**
@@ -112,20 +103,29 @@ public class Ui {
      * @param results The list of tasks that match the search.
      * @return The task list that matches the search result.
      */
-    public String displaySearch(ArrayList<Task> results, String display) {
+    public String displaySearch(ArrayList<Task> results, String keyword) {
         if (results.isEmpty()) {
-            return "No tasks on " + display;
-        } else {
-            StringBuilder taskList = new StringBuilder("This is the list of tasks for " + display + ":");
-
-            for (int i = 0; i < results.size(); i++) {
-                taskList.append(" ").append(results.get(i));
-                if (i < results.size() - 1) {
-                    taskList.append("\n");
-                }
-            }
-            return taskList.toString();
+            return "No tasks on " + keyword;
         }
+        String heading = "This is the list of tasks for " + keyword + ":";
+        return heading + formatTaskList(results);
+    }
+
+    /**
+     * Format the array of task in a string.
+     *
+     * @param tasks The task to format.
+     * @return The string of tasks in the task list.
+     */
+    private String formatTaskList(ArrayList<Task> tasks) {
+        StringBuilder taskList = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            taskList.append(i + 1).append(". ").append(tasks.get(i));
+            if (i < tasks.size() - 1) {
+                taskList.append("\n");
+            }
+        }
+        return taskList.toString();
     }
 
 
