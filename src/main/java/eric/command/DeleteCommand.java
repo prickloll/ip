@@ -25,9 +25,18 @@ public class DeleteCommand extends Command {
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         Task removedTask = tasks.deleteTask(description);
         assert removedTask != null : "Task should have been successfully removed and returned.";
+        saveTasks(tasks, repo);
+        return ui.displayDeleted(removedTask, tasks.getSize());
+    }
+
+    /**
+     * Helper method to abstract low-level saving task process.
+     *
+     * @param tasks The tasks to save.
+     * @param repo The repository to save the tasks into.
+     * @throws EricException If an error occurs during the saving of the task.
+     */
+    public void saveTasks(TaskList tasks, Repository repo) throws EricException {
         repo.save(tasks.getEveryTask());
-        String response = ui.displayDeleted(removedTask, tasks.getSize());
-        assert response != null : "ui should have returned a response.";
-        return response;
     }
 }

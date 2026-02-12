@@ -15,6 +15,7 @@ import eric.task.Task;
  * Manages the loading and saving of task data to text file
  */
 public class Repository {
+    private static final String TEXT_FILE_DIRECTORY = "./data/";
     private String filePath;
 
     /**
@@ -32,8 +33,31 @@ public class Repository {
      * @throws IOException If directory cannot be created.
      */
     private void makeFolder() throws IOException {
-        Files.createDirectories((Paths.get("./data/")));
+        Files.createDirectories((Paths.get(TEXT_FILE_DIRECTORY)));
     }
+
+    private void writeTasksToFile(ArrayList<Task> tasks) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        for (Task task : tasks) {
+            assert task != null : "Cannot save a null object into the task list.";
+            fw.write(task.toFileFormat() + System.lineSeparator());
+        }
+        fw.close();
+    }
+
+    private ArrayList<Task> loadTasksFromFile(File file) throws EricException {
+        ArrayList<Task> fileTasks = new ArrayList<>();
+        try {
+            Scanner s = new Scanner(file);
+            while (s.hasNext()) {
+                fileTasks.add(Task.fileToTask(s.nextLine()));
+            }
+            return fileTasks;
+        } catch (IOException e) {
+            throw new EricException("Met with error trying to load the file!");
+        }
+    }
+
 
     /**
      * Saves current task list to the text file.
@@ -44,16 +68,13 @@ public class Repository {
     public void save(ArrayList<Task> tasks) throws EricException {
         try {
             makeFolder();
-            FileWriter fw = new FileWriter(filePath);
-            for (Task task : tasks) {
-                assert task != null : "Cannot save a null object into the task list.";
-                fw.write(task.toFileFormat() + System.lineSeparator());
-            }
-            fw.close();
+            writeTasksToFile(tasks);
         } catch (IOException e) {
             throw new EricException("Met with error while trying to save!");
         }
     }
+
+
 
     /**
      * Loads task from the text file and reconstructs them into a Task ArrayList.
@@ -62,24 +83,12 @@ public class Repository {
      * @throws EricException If the file is corrupted or if an I/O error is present.
      */
     public ArrayList<Task> load() throws EricException {
-        ArrayList<Task> fileTasks = new ArrayList<>();
-        File f = new File(filePath);
-        if (!f.exists()) {
-            return fileTasks;
-        }
 
-        try {
-            Scanner s = new Scanner(f);
-            while (s.hasNext()) {
-                String line = s.nextLine();
-                assert !line.trim().isEmpty() : "Text file has an empty line.";
-                fileTasks.add(Task.fileToTask(line));
-            }
-        } catch (IOException e) {
-            throw new EricException("Met with error trying to load the file!");
+        File dataFile = new File(filePath);
+        if (!dataFile.exists()) {
+            return new ArrayList<>();
         }
-        assert fileTasks != null : "Repository should always return a list object.";
-        return fileTasks;
+        return loadTasksFromFile(dataFile);
     }
 
 

@@ -25,10 +25,18 @@ public class AddDeadlineCommand extends Command {
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         Task addedTask = tasks.addDeadline(description);
         assert addedTask != null : "Task should have been successfully created and returned.";
-        repo.save(tasks.getEveryTask());
-        String response = ui.displayTaskAdded(addedTask, tasks.getSize());
-        assert response != null : "ui should have returned a response.";
-        return response;
+        saveTasks(tasks, repo);
+        return ui.displayTaskAdded(addedTask, tasks.getSize());
+    }
 
+    /**
+     * Helper method to abstract low-level saving task process.
+     *
+     * @param tasks The tasks to save.
+     * @param repo The repository to save the tasks into.
+     * @throws EricException If an error occurs during the saving of the task.
+     */
+    public void saveTasks(TaskList tasks, Repository repo) throws EricException {
+        repo.save(tasks.getEveryTask());
     }
 }
