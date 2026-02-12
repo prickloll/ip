@@ -13,10 +13,27 @@ import eric.ui.Ui;
  */
 public class FindCommand extends Command {
     private static final String SEARCH_PREFIX = "keyword: ";
-    private final String description;
+    private final String[] keywords;
+    private final boolean isStrict;
+    private final boolean isToDo;
+    private final boolean isDeadLine;
+    private final boolean isEvent;
 
-    public FindCommand(String description) {
-        this.description = description;
+    /**
+     * Initialises a FindCommand object.
+     *
+     * @param keywords The keywords to find for.
+     * @param isStrict Boolean flag to indicate a strict search.
+     * @param isToDo Boolean flag to indicate searching for todo tasks.
+     * @param isDeadLine Boolean flag to indicate searching for deadline tasks.
+     * @param isEvent Boolean flag to indicate searching for event tasks.
+     */
+    public FindCommand(String[] keywords, boolean isStrict, boolean isToDo, boolean isDeadLine, boolean isEvent) {
+        this.keywords = keywords;
+        this.isStrict = isStrict;
+        this.isToDo = isToDo;
+        this.isDeadLine = isDeadLine;
+        this.isEvent = isEvent;
     }
 
     /**
@@ -26,7 +43,7 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ArrayList<Task> results = tasks.findTasksByKeyword(description);
+        ArrayList<Task> results = tasks.findTasksByKeyword(keywords, isStrict, isToDo, isDeadLine, isEvent);
         assert results != null : "Search results list should be initialised even if it is empty.";
         String searchCriteria = extractSearchCriteria();
         return ui.displaySearch(results, searchCriteria);
@@ -38,7 +55,24 @@ public class FindCommand extends Command {
      * @return The search result string.
      */
     private String extractSearchCriteria() {
-        String keyword = description.split(" ")[1];
-        return SEARCH_PREFIX + keyword.trim();
+
+        String keywordsLine = String.join(", ", keywords);
+        String isStrictMatch = isStrict ? " (All must match strictly)" : " (Loose match)";
+        String taskType = formatFilters();
+        return SEARCH_PREFIX + keywordsLine + isStrictMatch + taskType + "\n";
+    }
+    private String formatFilters() {
+        if (!isToDo && !isDeadLine && !isEvent) {
+            return "";
+        }
+        String type = "";
+        if (isToDo) {
+            type = "Todos";
+        } else if (isDeadLine) {
+            type = "Deadline";
+        } else if (isEvent) {
+            type = "Event";
+        }
+        return " in [" + type + "]";
     }
 }

@@ -49,7 +49,7 @@ public class Parser {
         case FINDDATE:
             return new FindDateCommand(userInput);
         case FIND:
-            return new FindCommand(userInput);
+            return configureFind(userInput);
         case UNKNOWN:
         default:
             throw new EricException("Sorry, I can't seem to handle your request!");
@@ -69,5 +69,32 @@ public class Parser {
         } catch (IllegalArgumentException e) {
             return CommandType.UNKNOWN;
         }
+    }
+
+    private static Command configureFind(String input) throws EricException {
+        //for strict searching
+        boolean isStrict = input.contains("/all");
+
+        //Detect filter for different events
+        boolean isToDo = input.contains("/todo");
+        boolean isEvent = input.contains("/event");
+        boolean isDeadLine = input.contains("/deadline");
+
+        //Remove all flags from input
+        String cleanInput = input.replace("find", "")
+                .replace("/all", "")
+                .replace("/todo", "")
+                .replace("/deadline", "")
+                .replace("/event", "")
+                .trim();
+
+        if (cleanInput.isEmpty()) {
+            throw new EricException("Please provide a keyword to search for against the task list.");
+        }
+
+        String[] keywords = cleanInput.split("\\s+");
+        return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine);
+
+
     }
 }

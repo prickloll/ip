@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import eric.EricException;
 
@@ -122,25 +123,21 @@ public class TaskList {
         return results;
     }
     /**
-     * Finds task based on given keyword.
-     *
-     * @param userInput The user's keyword to search for.
-     * @return The list of tasks that matches the given keyword.
+     * Finds task based on keywords.
+     * @param keywords The keywords to search against.
+     * @param isStrict How strict the searching must be.
+     * @param isTodo Task type flag for searching only for todo tasks.
+     * @param isDeadline Task type flag for searching only for deadline tasks.
+     * @param isEvent Task type flag for searching only for event tasks.
+     * @return List of tasks that matches the contraints.
      * @throws EricException If the keyword is not specified.
      */
-    public ArrayList<Task> findTasksByKeyword(String userInput) throws EricException {
-        String[] keywords = decipherSearchWords(userInput);
-        ArrayList<Task> results = new ArrayList<>();
-        for (Task task : tasks) {
-            assert task != null : "Task object cannot be null here";
-            String taskDescription = task.getDescription().toLowerCase();
-            Boolean isMatch = Arrays.stream(keywords)
-                    .anyMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
-            if (isMatch) {
-                results.add(task);
-            }
-        }
-        return results;
+    public ArrayList<Task> findTasksByKeyword(String[] keywords, boolean isStrict, boolean isTodo, boolean isDeadline,
+                                              boolean isEvent) throws EricException {
+        return tasks.stream()
+               .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
+               .filter(task -> matchKeyword(task, keywords, isStrict))
+               .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getSize() {
@@ -304,19 +301,48 @@ public class TaskList {
             throw new EricException(("Use yyyy-MM-dd as the date format!"));
         }
     }
+    /**
+     * Return a boolean flag if the task description matches with the keywords.
+     *
+     * @param task The interested task to search against.
+     * @param keywords The list of keywords to search for.
+     * @param isStrict Specifying an "And" search or an "Or" search.
+     * @return A boolean flag indicating if the task description is matched against any keyword.
+     */
+    private boolean matchKeyword(Task task, String[] keywords, boolean isStrict) {
+        String taskDescription = task.getDescription().toLowerCase();
+        if (isStrict) {
+            return Arrays.stream(keywords)
+                    .allMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
+        } else {
+            return Arrays.stream(keywords)
+                    .anyMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
+        }
+    }
 
     /**
-     * Retrieve the search keyword from the user input.
+     * Return a boolean flag if the task matches the desired task type.
      *
-     * @param userInput The user input which contains the search keyword.
-     * @return The search keyword.
-     * @throws EricException If the search keyword is missing.
+     * @param task The interested task to search against.
+     * @param isTodo A boolean flag to limit search to todo task.
+     * @param isDeadLine A boolean flag to limit search to deadline task.
+     * @param isEvent A boolean flag to limit search to event task.
+     * @return
      */
-    private String[] decipherSearchWords(String userInput) throws EricException {
-        String[] descriptions = userInput.split(" ");
-        if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
-            throw new EricException("Please specify the keyword you want to search for!");
+    private boolean matchTaskType(Task task, boolean isTodo, boolean isDeadLine, boolean isEvent) {
+        if (!isTodo && !isDeadLine && !isEvent) {
+            return true;
         }
-        return Arrays.copyOfRange(descriptions, 1, descriptions.length);
+        if (isTodo && task instanceof Todo) {
+            return true;
+        }
+        if (isDeadLine && task instanceof Deadline) {
+            return true;
+        }
+        if (isEvent && task instanceof Event) {
+            return true;
+        }
+        return false;
+
     }
 }
