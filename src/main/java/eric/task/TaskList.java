@@ -304,7 +304,6 @@ public class TaskList {
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the keyword you want to search for!");
         }
-
         return descriptions[1].toLowerCase();
     }
 }
