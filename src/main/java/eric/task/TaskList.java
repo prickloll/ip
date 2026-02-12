@@ -2,6 +2,7 @@ package eric.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import eric.EricException;
 
@@ -128,11 +129,14 @@ public class TaskList {
      * @throws EricException If the keyword is not specified.
      */
     public ArrayList<Task> findTasksByKeyword(String userInput) throws EricException {
-        String keyword = decipherSearchWord(userInput);
+        String[] keywords = decipherSearchWords(userInput);
         ArrayList<Task> results = new ArrayList<>();
         for (Task task : tasks) {
             assert task != null : "Task object cannot be null here";
-            if (task.getDescription().toLowerCase().contains(keyword)) {
+            String taskDescription = task.getDescription().toLowerCase();
+            Boolean isMatch = Arrays.stream(keywords)
+                    .anyMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
+            if (isMatch) {
                 results.add(task);
             }
         }
@@ -308,11 +312,11 @@ public class TaskList {
      * @return The search keyword.
      * @throws EricException If the search keyword is missing.
      */
-    private String decipherSearchWord(String userInput) throws EricException {
-        String[] descriptions = userInput.split(" ", 2);
+    private String[] decipherSearchWords(String userInput) throws EricException {
+        String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the keyword you want to search for!");
         }
-        return descriptions[1].toLowerCase();
+        return Arrays.copyOfRange(descriptions, 1, descriptions.length);
     }
 }
