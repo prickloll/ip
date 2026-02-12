@@ -9,10 +9,12 @@ public class Todo extends Task {
      */
     public Todo(String description) {
         super(description);
+        assert this.description != null : "Todo description cannot be null.";
     }
 
     @Override
     public String toString() {
+        assert this.description != null : "Todo description cannot be null during display.";
         return "[T]" + super.toString();
     }
 
@@ -22,6 +24,7 @@ public class Todo extends Task {
      */
     @Override
     public String toFileFormat() {
+        assert this.description != null : "Todo description must be present for file storage.";
         return "T | " + super.toFileFormat();
     }
 }

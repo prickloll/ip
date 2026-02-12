@@ -23,6 +23,7 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+        assert tasks.isEmpty() : "A newly initialised task list should be empty";
     }
 
     /**
@@ -38,7 +39,9 @@ public class TaskList {
             throw new EricException("The todo's description cannot be empty!");
         }
         Task t = new Todo(descriptions[1].trim());
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
 
@@ -59,7 +62,9 @@ public class TaskList {
             throw new EricException("Missing deadline after /by!");
         }
         Task t = new Deadline(descriptions[0], descriptions[1]);
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
 
@@ -85,7 +90,9 @@ public class TaskList {
             throw new EricException("Event missing values after /from and /to!");
         }
         Task t = new Event(descriptions[0], dateParts[0].trim(), dateParts[1].trim());
+        int oldTaskSize = tasks.size();
         tasks.add(t);
+        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
         return t;
     }
 
@@ -96,12 +103,12 @@ public class TaskList {
      * @throws EricException If the index is invalid or missing.
      */
     public Task setMarkUnmarked(String input) throws EricException {
-
         String[] inputs = input.split(" ");
         if (inputs.length < 2) {
             throw new EricException("Task number not specified!");
         }
         int index = validIndex(inputs[1]);
+        assert index >= 0 && index < tasks.size() : "Index returned should not be out of range.";
         boolean isMark = inputs[0].equals("mark");
         if (isMark) {
             tasks.get(index).markDone();
@@ -123,8 +130,12 @@ public class TaskList {
         if (descriptions.length < 2) {
             throw new EricException("Task number for deletion not specified!");
         }
+
         int index = validIndex((descriptions[1]));
-        return tasks.remove(index);
+        int oldTaskSize = tasks.size();
+        Task removedTask = tasks.remove(index);
+        assert tasks.size() == oldTaskSize - 1 : "Size of task list should have decreased after removing a task.";
+        return removedTask;
 
     }
 
@@ -135,6 +146,7 @@ public class TaskList {
      * @throws EricException If the task index is out of bounds.
      */
     private int validIndex(String input) throws EricException {
+        assert input != null : "Index input should not be null";
         try {
             int index = Integer.parseInt(input) - 1;
             if (index < 0 || index >= tasks.size()) {
@@ -161,8 +173,11 @@ public class TaskList {
         }
         try {
             LocalDate intDate = LocalDate.parse(descriptions[1].trim());
+            assert intDate != null : "Parsed date should not be null.";
             ArrayList<Task> results = new ArrayList<>();
+            assert tasks != null : "Task list should be initialised.";
             for (Task t : tasks) {
+                assert t != null : "Task should not be null";
                 if (t instanceof Deadline && ((Deadline) t).by.equals(intDate)) {
                     results.add(t);
                 } else if (t instanceof Event
@@ -171,6 +186,7 @@ public class TaskList {
                     results.add(t);
                 }
             }
+            assert results != null : "Search results list should be initialised";
             return results;
         } catch (DateTimeParseException e) {
             throw new EricException(("Use yyyy-MM-dd as the date format!"));
@@ -191,12 +207,17 @@ public class TaskList {
         }
 
         String keyword = descriptions[1].toLowerCase();
+        assert keyword != null : "Keyword should not be null after extraction.";
         ArrayList<Task> results = new ArrayList<>();
+        assert tasks != null : "Task list should be initialised.";
         for (Task t : tasks) {
+            assert t != null : "Task should not be null";
+            assert t.getDescription() != null : "Task should not be found with a null description";
             if (t.getDescription().toLowerCase().contains(keyword)) {
                 results.add(t);
             }
         }
+        assert results != null : "Search results list should be initialised";
         return results;
 
 
@@ -207,6 +228,7 @@ public class TaskList {
     }
 
     public ArrayList<Task> getEveryTask() {
+        assert tasks != null : "Task list should not be null.";
         return tasks;
     }
 }

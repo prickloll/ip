@@ -17,6 +17,8 @@ public class ListCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        return ui.displayTaskList(tasks.getEveryTask());
+        String response = ui.displayTaskList(tasks.getEveryTask());
+        assert response != null : "ui should have returned a response.";
+        return response;
     }
 }

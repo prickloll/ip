@@ -24,7 +24,10 @@ public class AddTodoCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         Task addedTask = tasks.addTodo(description);
+        assert addedTask != null : "Task should have been successfully created and returned.";
         repo.save(tasks.getEveryTask());
-        return ui.displayTaskAdded(addedTask, tasks.getSize());
+        String response = ui.displayTaskAdded(addedTask, tasks.getSize());
+        assert response != null : "ui should have returned a response.";
+        return response;
     }
 }

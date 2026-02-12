@@ -25,7 +25,10 @@ public class MarkCommand extends Command {
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
         boolean isMark = description.startsWith("mark");
         Task markTask = tasks.setMarkUnmarked(description);
+        assert markTask != null : "Task to be marked or unmarked should not be null.";
         repo.save(tasks.getEveryTask());
-        return ui.displayMarked(markTask, isMark);
+        String response = ui.displayMarked(markTask, isMark);
+        assert response != null : "ui should have returned a response.";
+        return response;
     }
 }

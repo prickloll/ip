@@ -29,6 +29,7 @@ public class Task {
      */
     public void markDone() {
         this.isDone = true;
+        assert this.isDone : "Task should be marked as done";
     }
 
     /**
@@ -36,6 +37,7 @@ public class Task {
      */
     public void markUndone() {
         this.isDone = false;
+        assert !this.isDone : "Task should be marked as undone";
     }
 
     @Override
@@ -49,6 +51,7 @@ public class Task {
      * @return String representation of task to be saved
      */
     public String toFileFormat() {
+        assert description != null : "Task description cannot be null";
         return (isDone ? "1" : "0") + " | " + description;
     }
 
@@ -84,6 +87,7 @@ public class Task {
         default:
             return null;
         }
+        assert currTask != null : "Task object should have been created.";
         if (isDone) {
             currTask.markDone();
         }

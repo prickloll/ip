@@ -27,11 +27,14 @@ public class Event extends Task {
         } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }
+        assert this.from != null : "Event 'from' date should have been parsed.";
+        assert this.to != null : "Event 'to' date should have been parsed.";
 
     }
 
     @Override
     public String toString() {
+        assert from != null && to != null : "Event  from and to must not be null.";
         return "[E]" + super.toString() + " (from: " + from.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
                 + " to: " + to.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
@@ -42,6 +45,7 @@ public class Event extends Task {
      */
     @Override
     public String toFileFormat() {
+        assert from != null && to != null : "Event  from and to must not be null.";
         return "E | " + super.toFileFormat();
     }
 }

@@ -46,6 +46,7 @@ public class Repository {
             makeFolder();
             FileWriter fw = new FileWriter(filePath);
             for (Task task : tasks) {
+                assert task != null : "Cannot save a null object into the task list.";
                 fw.write(task.toFileFormat() + System.lineSeparator());
             }
             fw.close();
@@ -70,11 +71,14 @@ public class Repository {
         try {
             Scanner s = new Scanner(f);
             while (s.hasNext()) {
-                fileTasks.add(Task.fileToTask(s.nextLine()));
+                String line = s.nextLine();
+                assert !line.trim().isEmpty() : "Text file has an empty line.";
+                fileTasks.add(Task.fileToTask(line));
             }
         } catch (IOException e) {
             throw new EricException("Met with error trying to load the file!");
         }
+        assert fileTasks != null : "Repository should always return a list object.";
         return fileTasks;
     }
 

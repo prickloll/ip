@@ -24,10 +24,13 @@ public class Deadline extends Task {
         } catch (DateTimeParseException e) {
             throw new EricException("Enter the date in the yyyy-MM-dd format please!");
         }
+        assert this.by != null : "Deadline 'by' date should not be null.";
+        assert this.description != null : "Description should not be null here.";
     }
 
     @Override
     public String toString() {
+        assert by != null : "Cannot format a null dateline";
         return "[D]" + super.toString() + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 
@@ -37,6 +40,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileFormat() {
+        assert by != null : "Cannot format a null dateline";
         return "D | " + super.toFileFormat() + " | " + by;
     }
 }
