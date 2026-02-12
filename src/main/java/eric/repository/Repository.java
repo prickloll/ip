@@ -23,7 +23,6 @@ public class Repository {
      * @param filePath The relative file path to the text file.
      */
     public Repository(String filePath) {
-        assert !filePath.trim().isEmpty() : "File path cannot be empty.";
         this.filePath = filePath;
     }
 
@@ -43,8 +42,6 @@ public class Repository {
      * @throws EricException If an I/O error happens during the save process.
      */
     public void save(ArrayList<Task> tasks) throws EricException {
-        assert !filePath.trim().isEmpty() : "File path cannot be empty";
-        assert tasks != null : "Cannot save a null task list.";
         try {
             makeFolder();
             FileWriter fw = new FileWriter(filePath);

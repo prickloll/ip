@@ -12,7 +12,6 @@ public class Task {
      * @param description The string that describes the task.
      */
     public Task(String description) {
-        assert description != null : "Task description cannot be null";
         this.description = description;
         this.isDone = false;
     }
@@ -30,7 +29,7 @@ public class Task {
      */
     public void markDone() {
         this.isDone = true;
-        assert isDone : "Task should be marked as done";
+        assert this.isDone : "Task should be marked as done";
     }
 
     /**
@@ -38,7 +37,7 @@ public class Task {
      */
     public void markUndone() {
         this.isDone = false;
-        assert isDone : "Task should be marked as undone";
+        assert !this.isDone : "Task should be marked as undone";
     }
 
     @Override
@@ -65,7 +64,6 @@ public class Task {
      * @throws EricException If the line format is invalid or corrupted.
      */
     public static Task fileToTask(String line) throws EricException {
-        assert line != null : "Line cannot be null";
         String[] lineParts = line.split(" \\| ", -1);
         if (lineParts.length < 3) {
             throw new EricException("File might be corrupted!");

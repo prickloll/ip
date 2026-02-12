@@ -45,7 +45,9 @@ public class Eric {
      * @return The response to the user input.
      */
     public String getResponse(String input) {
-        assert input != null : "Input to eric should not be null";
+        if (input == null) {
+            throw new NullPointerException("Input cannot be null");
+        }
         try {
             Command c = Parser.parse(input);
             return c.execute(tasks, ui, repo);

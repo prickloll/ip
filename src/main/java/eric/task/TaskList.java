@@ -15,7 +15,6 @@ public class TaskList {
      * @param tasks The task list given.
      */
     public TaskList(ArrayList<Task> tasks) {
-        assert tasks != null : "Tasklist cannot be initialised with a null list";
         this.tasks = tasks;
     }
 
@@ -35,7 +34,6 @@ public class TaskList {
      * @throws EricException If the task description is empty.
      */
     public Task addTodo(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null";
         String[] descriptions = userInput.split(" ", 2);
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("The todo's description cannot be empty!");
@@ -55,7 +53,6 @@ public class TaskList {
      * @throws EricException If the task format is invalid or missing.
      */
     public Task addDeadline(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null";
         if (!userInput.contains("/by")) {
             throw new EricException("Missing /by after declaring a deadline task!");
         }
@@ -79,7 +76,6 @@ public class TaskList {
      * @throws EricException If the task format is invalid or missing.
      */
     public Task addEvent(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null";
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new EricException("Event must have /from and /to identifiers!");
 
@@ -107,7 +103,6 @@ public class TaskList {
      * @throws EricException If the index is invalid or missing.
      */
     public Task setMarkUnmarked(String input) throws EricException {
-        assert input != null : "Input should not be null";
         String[] inputs = input.split(" ");
         if (inputs.length < 2) {
             throw new EricException("Task number not specified!");
@@ -131,7 +126,6 @@ public class TaskList {
      * @throws EricException If the task number is out of bounds or invalid.
      */
     public Task deleteTask(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null";
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2) {
             throw new EricException("Task number for deletion not specified!");
@@ -173,7 +167,6 @@ public class TaskList {
      * @throws EricException If the date format is inaccurate.
      */
     public ArrayList<Task> findTasksByDate(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null.";
         String[] descriptions = userInput.split(" ");
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the date you want to search for!");
@@ -208,7 +201,6 @@ public class TaskList {
      * @throws EricException If the keyword is not specified.
      */
     public ArrayList<Task> findTasksByKeyword(String userInput) throws EricException {
-        assert userInput != null : "User input should not be null.";
         String[] descriptions = userInput.split(" ", 2);
         if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
             throw new EricException("Please specify the keyword you want to search for!");

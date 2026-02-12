@@ -22,7 +22,6 @@ public class Parser {
      * @throws EricException If the commands or parameters are invalid.
      */
     public static Command parse(String userInput) throws EricException {
-        assert userInput != null : "User input passed to parser cannot be null";
         Command command;
         if (userInput.equals("bye")) {
             command = new ExitCommand();

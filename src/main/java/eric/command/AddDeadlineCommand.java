@@ -23,15 +23,12 @@ public class AddDeadlineCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        assert tasks != null : "Command cannot execute with null tasks being passed.";
-        assert ui != null : "Command cannot execute with null ui being passed.";
-        assert repo != null : "Command cannot execute with null repo being passed.";
         Task addedTask = tasks.addDeadline(description);
+        assert addedTask != null : "Task should have been successfully created and returned.";
         repo.save(tasks.getEveryTask());
-        return ui.displayTaskAdded(addedTask, tasks.getSize());
-
-
-
+        String response = ui.displayTaskAdded(addedTask, tasks.getSize());
+        assert response != null : "ui should have returned a response.";
+        return response;
 
     }
 }

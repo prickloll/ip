@@ -25,10 +25,10 @@ public class FindDateCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        assert tasks != null : "Command cannot execute with null tasks being passed.";
-        assert ui != null : "Command cannot execute with null ui being passed.";
-        assert repo != null : "Command cannot execute with null repo being passed.";
         ArrayList<Task> results = tasks.findTasksByDate(description);
-        return ui.displaySearch(results, description.split(" ")[1]);
+        assert results != null : "Search results list should be initialised even if it is empty.";
+        String response = ui.displaySearch(results, "keyword: " + description.split(" ")[1]);
+        assert response != null : "ui should have returned a response.";
+        return response;
     }
 }
