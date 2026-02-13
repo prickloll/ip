@@ -82,13 +82,7 @@ public class Parser {
         boolean isSorted = input.contains("/sort");
 
         //Remove all flags from input
-        String cleanInput = input.replace("find", "")
-                .replace("\\s+/all\\b", "")
-                .replace("\\s+/todo\\b", "")
-                .replace("\\s+/deadline\\b", "")
-                .replace("\\s+/event\\b", "")
-                .replace("\\s+/sort\\b", "")
-                .trim();
+        String cleanInput = cleanInputFlags(input);
 
         if (cleanInput.isEmpty()) {
             throw new EricException("Please provide a keyword to search for against the task list.");
@@ -98,5 +92,21 @@ public class Parser {
         return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine, isSorted);
 
 
+    }
+
+    /**
+     * Take in a user input and cleans it of the flags.
+     *
+     * @param input The input to clean.
+     * @return The user input without the flags.
+     */
+    private static String cleanInputFlags(String input) {
+        return input.replace("find", "")
+                .replace("\\s+/all\\b", "")
+                .replace("\\s+/todo\\b", "")
+                .replace("\\s+/deadline\\b", "")
+                .replace("\\s+/event\\b", "")
+                .replace("\\s+/sort\\b", "")
+                .trim();
     }
 }
