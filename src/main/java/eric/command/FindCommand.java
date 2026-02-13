@@ -1,5 +1,6 @@
 package eric.command;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import eric.EricException;
@@ -14,6 +15,7 @@ import eric.ui.Ui;
 public class FindCommand extends Command {
     private static final String SEARCH_PREFIX = "keyword: ";
     private final String[] keywords;
+    private final LocalDate searchDate;
     private final boolean isStrict;
     private final boolean isToDo;
     private final boolean isDeadLine;
@@ -29,7 +31,7 @@ public class FindCommand extends Command {
      * @param isEvent Boolean flag to indicate searching for event tasks.
      * @param isSorted Boolean flag to indicated return search results in sorted order.
      */
-    public FindCommand(String[] keywords, boolean isStrict, boolean isToDo, boolean isDeadLine, boolean isEvent,
+    public FindCommand(String[] keywords, LocalDate searchDate, boolean isStrict, boolean isToDo, boolean isDeadLine, boolean isEvent,
                        boolean isSorted) {
         this.keywords = keywords;
         this.isStrict = isStrict;
@@ -37,6 +39,7 @@ public class FindCommand extends Command {
         this.isDeadLine = isDeadLine;
         this.isEvent = isEvent;
         this.isSorted = isSorted;
+        this.searchDate = searchDate;
     }
 
     /**
@@ -46,7 +49,7 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ArrayList<Task> results = tasks.findTasksByKeyword(keywords, isStrict, isToDo, isDeadLine, isEvent, isSorted);
+        ArrayList<Task> results = tasks.findTasksByKeyword(keywords, searchDate, isStrict, isToDo, isDeadLine, isEvent, isSorted);
         assert results != null : "Search results list should be initialised even if it is empty.";
         String searchCriteria = extractSearchCriteria();
         return ui.displaySearch(results, searchCriteria);

@@ -1,4 +1,7 @@
 package eric.parser;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 import eric.EricException;
 import eric.command.AddDeadlineCommand;
 import eric.command.AddEventCommand;
@@ -80,6 +83,11 @@ public class Parser {
         boolean isEvent = input.contains("/event");
         boolean isDeadLine = input.contains("/deadline");
         boolean isSorted = input.contains("/sort");
+        boolean hasDate = input.contains("/date");
+        LocalDate searchDate = null;
+        if (hasDate) {
+            searchDate = parseDateFromInput(input);
+        }
 
         //Remove all flags from input
         String cleanInput = cleanInputFlags(input);
@@ -88,8 +96,9 @@ public class Parser {
             throw new EricException("Please provide a keyword to search for against the task list.");
         }
 
+        //extract keywords
         String[] keywords = cleanInput.split("\\s+");
-        return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine, isSorted);
+        return new FindCommand(keywords, searchDate, isStrict, isToDo, isEvent, isDeadLine, isSorted);
 
 
     }
@@ -102,11 +111,27 @@ public class Parser {
      */
     private static String cleanInputFlags(String input) {
         return input.replace("find", "")
+                .replace("/date\\s+\\S+", "")
                 .replace("\\s+/all\\b", "")
                 .replace("\\s+/todo\\b", "")
                 .replace("\\s+/deadline\\b", "")
                 .replace("\\s+/event\\b", "")
                 .replace("\\s+/sort\\b", "")
                 .trim();
+    }
+
+    private static LocalDate parseDateFromInput(String input) throws EricException {
+        String[] parts = input.split("/date");
+
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new EricException("Please provide a date to search after the /dateflag!");
+        }
+
+        String dateString = parts[1].trim().split("\\s+")[0];
+        try {
+            return LocalDate.parse(dateString);
+        } catch (DateTimeParseException e) {
+            throw new EricException("Date to search for is not in the correct format!");
+        }
     }
 }

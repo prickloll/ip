@@ -133,11 +133,12 @@ public class TaskList {
      * @return List of tasks that matches the contraints.
      * @throws EricException If the keyword is not specified.
      */
-    public ArrayList<Task> findTasksByKeyword(String[] keywords, boolean isStrict, boolean isTodo, boolean isDeadline,
-                                              boolean isEvent, boolean isSorted) throws EricException {
+    public ArrayList<Task> findTasksByKeyword(String[] keywords, LocalDate searchDate, boolean isStrict, boolean isTodo,
+                                              boolean isDeadline, boolean isEvent, boolean isSorted) {
         Stream<Task> tasksStream = tasks.stream()
                .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
-               .filter(task -> matchKeyword(task, keywords, isStrict));
+               .filter(task -> matchKeyword(task, keywords, isStrict))
+                .filter(task -> searchDate == null || withinDateRange(task, searchDate));
         if (isSorted) {
             tasksStream = sortAlphabetically(tasksStream);
         }
@@ -331,7 +332,7 @@ public class TaskList {
      * @param isTodo A boolean flag to limit search to todo task.
      * @param isDeadLine A boolean flag to limit search to deadline task.
      * @param isEvent A boolean flag to limit search to event task.
-     * @return
+     * @return A boolean flag to indicate which task type it is tagged to.
      */
     private boolean matchTaskType(Task task, boolean isTodo, boolean isDeadLine, boolean isEvent) {
         if (!isTodo && !isDeadLine && !isEvent) {
