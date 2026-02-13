@@ -4,6 +4,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import eric.EricException;
 
@@ -133,11 +134,14 @@ public class TaskList {
      * @throws EricException If the keyword is not specified.
      */
     public ArrayList<Task> findTasksByKeyword(String[] keywords, boolean isStrict, boolean isTodo, boolean isDeadline,
-                                              boolean isEvent) throws EricException {
-        return tasks.stream()
+                                              boolean isEvent, boolean isSorted) throws EricException {
+        Stream<Task> tasksStream = tasks.stream()
                .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
-               .filter(task -> matchKeyword(task, keywords, isStrict))
-               .collect(Collectors.toCollection(ArrayList::new));
+               .filter(task -> matchKeyword(task, keywords, isStrict));
+        if (isSorted) {
+            tasksStream = tasksStream.sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()));
+        }
+        return tasksStream.collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getSize() {

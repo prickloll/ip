@@ -79,13 +79,15 @@ public class Parser {
         boolean isToDo = input.contains("/todo");
         boolean isEvent = input.contains("/event");
         boolean isDeadLine = input.contains("/deadline");
+        boolean isSorted = input.contains("/sort");
 
         //Remove all flags from input
         String cleanInput = input.replace("find", "")
-                .replace("/all", "")
-                .replace("/todo", "")
-                .replace("/deadline", "")
-                .replace("/event", "")
+                .replace("\\s+/all\\b", "")
+                .replace("\\s+/todo\\b", "")
+                .replace("\\s+/deadline\\b", "")
+                .replace("\\s+/event\\b", "")
+                .replace("\\s+/sort\\b", "")
                 .trim();
 
         if (cleanInput.isEmpty()) {
@@ -93,7 +95,7 @@ public class Parser {
         }
 
         String[] keywords = cleanInput.split("\\s+");
-        return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine);
+        return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine, isSorted);
 
 
     }
