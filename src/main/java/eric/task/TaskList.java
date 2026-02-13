@@ -104,25 +104,6 @@ public class TaskList {
         return tasks.remove(index);
 
     }
-
-    /**
-     * Finds task based on given date
-     *
-     * @param userInput The user dateline input.
-     * @return The list of tasks that matches the given date.
-     * @throws EricException If the date format is inaccurate.
-     */
-    public ArrayList<Task> findTasksByDate(String userInput) throws EricException {
-        LocalDate searchDate = decipherSearchDate(userInput);
-        ArrayList<Task> results = new ArrayList<>();
-        for (Task task : tasks) {
-            assert task != null : "Task object cannot be null here";
-            if (withinDateRange(task, searchDate)) {
-                results.add(task);
-            }
-        }
-        return results;
-    }
     /**
      * Finds task based on keywords.
      * @param keywords The keywords to search against.

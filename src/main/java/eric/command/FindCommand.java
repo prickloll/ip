@@ -31,8 +31,8 @@ public class FindCommand extends Command {
      * @param isEvent Boolean flag to indicate searching for event tasks.
      * @param isSorted Boolean flag to indicated return search results in sorted order.
      */
-    public FindCommand(String[] keywords, LocalDate searchDate, boolean isStrict, boolean isToDo, boolean isDeadLine, boolean isEvent,
-                       boolean isSorted) {
+    public FindCommand(String[] keywords, LocalDate searchDate, boolean isStrict, boolean isToDo, boolean isDeadLine,
+                       boolean isEvent, boolean isSorted) {
         this.keywords = keywords;
         this.isStrict = isStrict;
         this.isToDo = isToDo;
@@ -49,7 +49,8 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        ArrayList<Task> results = tasks.findTasksByKeyword(keywords, searchDate, isStrict, isToDo, isDeadLine, isEvent, isSorted);
+        ArrayList<Task> results = tasks.findTasksByKeyword(keywords, searchDate, isStrict, isToDo, isDeadLine,
+                isEvent, isSorted);
         assert results != null : "Search results list should be initialised even if it is empty.";
         String searchCriteria = extractSearchCriteria();
         return ui.displaySearch(results, searchCriteria);

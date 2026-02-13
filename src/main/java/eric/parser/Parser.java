@@ -10,7 +10,6 @@ import eric.command.Command;
 import eric.command.DeleteCommand;
 import eric.command.ExitCommand;
 import eric.command.FindCommand;
-import eric.command.FindDateCommand;
 import eric.command.ListCommand;
 import eric.command.MarkCommand;
 
@@ -49,8 +48,6 @@ public class Parser {
             return new ListCommand();
         case DELETE:
             return new DeleteCommand(userInput);
-        case FINDDATE:
-            return new FindDateCommand(userInput);
         case FIND:
             return configureFind(userInput);
         case UNKNOWN:
