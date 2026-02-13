@@ -350,6 +350,12 @@ public class TaskList {
 
     }
 
+    /**
+     * Using streams to sort the task stream alphabetically while ignoring case.
+     *
+     * @param taskStream The stream of tasks to sort.
+     * @return The sorted stream of tasks.
+     */
     private Stream<Task> sortAlphabetically(Stream<Task> taskStream) {
         return taskStream.sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()));
     }
