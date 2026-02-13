@@ -71,6 +71,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Create a find command object based on user input and flags.
+     *
+     * @param input The user input.
+     * @return The find command object.
+     * @throws EricException The keyword or date to search for is missing.
+     */
     private static Command configureFind(String input) throws EricException {
         //for strict searching
         boolean isStrict = input.contains("/all");
@@ -90,7 +97,7 @@ public class Parser {
         String cleanInput = cleanInputFlags(input);
 
         if (cleanInput.isEmpty()) {
-            throw new EricException("Please provide a keyword to search for against the task list.");
+            throw new EricException("Please provide a keyword/date to search for against the task list.");
         }
 
         //extract keywords
@@ -117,6 +124,13 @@ public class Parser {
                 .trim();
     }
 
+    /**
+     * Extract the date from the user input.
+     *
+     * @param input The user input to extract the date from.
+     * @return The LocalDate object for the date string.
+     * @throws EricException The date string given is missing or in the wrong format.
+     */
     private static LocalDate parseDateFromInput(String input) throws EricException {
         String[] parts = input.split("/date");
 
