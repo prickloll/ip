@@ -139,7 +139,7 @@ public class TaskList {
                .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
                .filter(task -> matchKeyword(task, keywords, isStrict));
         if (isSorted) {
-            tasksStream = tasksStream.sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()));
+            tasksStream = sortAlphabetically(tasksStream);
         }
         return tasksStream.collect(Collectors.toCollection(ArrayList::new));
     }
@@ -348,5 +348,9 @@ public class TaskList {
         }
         return false;
 
+    }
+
+    private Stream<Task> sortAlphabetically(Stream<Task> taskStream) {
+        return taskStream.sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()));
     }
 }
