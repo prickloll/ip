@@ -1,4 +1,7 @@
 package eric.parser;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 import eric.EricException;
 import eric.command.AddDeadlineCommand;
 import eric.command.AddEventCommand;
@@ -7,7 +10,6 @@ import eric.command.Command;
 import eric.command.DeleteCommand;
 import eric.command.ExitCommand;
 import eric.command.FindCommand;
-import eric.command.FindDateCommand;
 import eric.command.ListCommand;
 import eric.command.MarkCommand;
 
@@ -46,8 +48,6 @@ public class Parser {
             return new ListCommand();
         case DELETE:
             return new DeleteCommand(userInput);
-        case FINDDATE:
-            return new FindDateCommand(userInput);
         case FIND:
             return configureFind(userInput);
         case UNKNOWN:
@@ -71,6 +71,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Create a find command object based on user input and flags.
+     *
+     * @param input The user input.
+     * @return The find command object.
+     * @throws EricException The keyword or date to search for is missing.
+     */
     private static Command configureFind(String input) throws EricException {
         //for strict searching
         boolean isStrict = input.contains("/all");
@@ -80,23 +87,62 @@ public class Parser {
         boolean isEvent = input.contains("/event");
         boolean isDeadLine = input.contains("/deadline");
         boolean isSorted = input.contains("/sort");
+        boolean hasDate = input.contains("/date");
+        LocalDate searchDate = null;
+        if (hasDate) {
+            searchDate = parseDateFromInput(input);
+        }
 
         //Remove all flags from input
-        String cleanInput = input.replace("find", "")
+        String cleanInput = cleanInputFlags(input);
+
+        if (cleanInput.isEmpty()) {
+            throw new EricException("Please provide a keyword/date to search for against the task list.");
+        }
+
+        //extract keywords
+        String[] keywords = cleanInput.split("\\s+");
+        return new FindCommand(keywords, searchDate, isStrict, isToDo, isEvent, isDeadLine, isSorted);
+
+
+    }
+
+    /**
+     * Take in a user input and cleans it of the flags.
+     *
+     * @param input The input to clean.
+     * @return The user input without the flags.
+     */
+    private static String cleanInputFlags(String input) {
+        return input.replace("find", "")
+                .replace("/date\\s+\\S+", "")
                 .replace("\\s+/all\\b", "")
                 .replace("\\s+/todo\\b", "")
                 .replace("\\s+/deadline\\b", "")
                 .replace("\\s+/event\\b", "")
                 .replace("\\s+/sort\\b", "")
                 .trim();
+    }
 
-        if (cleanInput.isEmpty()) {
-            throw new EricException("Please provide a keyword to search for against the task list.");
+    /**
+     * Extract the date from the user input.
+     *
+     * @param input The user input to extract the date from.
+     * @return The LocalDate object for the date string.
+     * @throws EricException The date string given is missing or in the wrong format.
+     */
+    private static LocalDate parseDateFromInput(String input) throws EricException {
+        String[] parts = input.split("/date");
+
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new EricException("Please provide a date to search after the /dateflag!");
         }
 
-        String[] keywords = cleanInput.split("\\s+");
-        return new FindCommand(keywords, isStrict, isToDo, isEvent, isDeadLine, isSorted);
-
-
+        String dateString = parts[1].trim().split("\\s+")[0];
+        try {
+            return LocalDate.parse(dateString);
+        } catch (DateTimeParseException e) {
+            throw new EricException("Date to search for is not in the correct format!");
+        }
     }
 }
