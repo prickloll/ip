@@ -76,7 +76,8 @@ public class Task {
     }
 
     /**
-     * Helper function to create task object.
+     * Creates and returns a task object.
+     *
      * @param lineParts The string array pertaining to a task.
      * @return A task object.
      * @throws EricException If an unknown task type is found.

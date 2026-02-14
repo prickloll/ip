@@ -26,6 +26,7 @@ public class Parser {
     }
     /**
      * Takes in the user input and execute corresponding commands.
+     *
      * @param userInput The string given by the user.
      * @return Command Returns the command object corresponding to the user input.
      * @throws EricException If the commands or parameters are invalid.
@@ -57,7 +58,7 @@ public class Parser {
     }
 
     /**
-     * Determine the command from user input.
+     * Determines the command from user input.
      *
      * @param userInput The command the user entered.
      * @return The type of command associated to the user input.
@@ -72,7 +73,7 @@ public class Parser {
     }
 
     /**
-     * Create a find command object based on user input and flags.
+     * Creates a find command object based on user input and flags.
      *
      * @param input The user input.
      * @return The find command object.
@@ -108,7 +109,7 @@ public class Parser {
     }
 
     /**
-     * Take in a user input and cleans it of the flags.
+     * Takes in a user input and cleans it of the flags.
      *
      * @param input The input to clean.
      * @return The user input without the flags.
@@ -125,7 +126,7 @@ public class Parser {
     }
 
     /**
-     * Extract the date from the user input.
+     * Extracts the date from the user input.
      *
      * @param input The user input to extract the date from.
      * @return The LocalDate object for the date string.

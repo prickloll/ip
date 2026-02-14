@@ -29,7 +29,7 @@ public class Event extends Task {
     }
 
     /**
-     * To parse the from and to string into the Event object.
+     * Parses the from and to string into the Event object.
      *
      * @param from The from date string.
      * @param to The to date string.
@@ -57,6 +57,7 @@ public class Event extends Task {
 
     /**
      * {@inheritDoc}
+     *
      * Includes the start and end times of the task in the text file.
      */
     @Override

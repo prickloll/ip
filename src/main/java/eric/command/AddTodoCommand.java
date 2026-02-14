@@ -19,7 +19,7 @@ public class AddTodoCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to adding and storing a todo task.
+     * Adds and stores a todo task.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
@@ -30,7 +30,7 @@ public class AddTodoCommand extends Command {
     }
 
     /**
-     * Helper method to abstract low-level saving task process.
+     * Abstracts low-level saving task process.
      *
      * @param tasks The tasks to save.
      * @param repo The repository to save the tasks into.

@@ -13,7 +13,7 @@ public class ExitCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to exiting the program.
+     * Exits the program.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {

@@ -106,6 +106,7 @@ public class TaskList {
     }
     /**
      * Finds task based on keywords.
+     *
      * @param keywords The keywords to search against.
      * @param isStrict How strict the searching must be.
      * @param isTodo Task type flag for searching only for todo tasks.
@@ -135,7 +136,8 @@ public class TaskList {
     }
 
     /**
-     * Tackles the task number given by the user.
+     * Returns the task index in relation to the user's given task number.
+     *
      * @param input The interested task number.
      * @return The task index if it exists.
      * @throws EricException If the task index is out of bounds.
@@ -153,7 +155,7 @@ public class TaskList {
     }
 
     /**
-     * Helper method to retreive todo task description
+     * Retreives the todo task description
      *
      * @param input The todo task string input by the user.
      * @param errorMsg The error message associated with the todo task.
@@ -185,7 +187,8 @@ public class TaskList {
     }
 
     /**
-     * Tidy the deadline task parts.
+     * Tidies the deadline task parts into a string array.
+     *
      * @param input The deadline task description.
      * @return The tidied deadline task string.
      * @throws EricException If there are missing parameters in the string.
@@ -200,7 +203,8 @@ public class TaskList {
     }
 
     /**
-     * Tidy the event task parts.
+     * Tidies the event task parts into a string array.
+     *
      * @param input The event task description.
      * @return The tidied event task string.
      * @throws EricException If there are missing parameters in the string.
@@ -221,7 +225,7 @@ public class TaskList {
     }
 
     /**
-     * Extract the task index the user is interested in.
+     * Extracts the task index the user is interested in.
      *
      * @param input The string user input for the task index.
      * @return The task index integer.
@@ -236,7 +240,7 @@ public class TaskList {
     }
 
     /**
-     * To update the task status as done or undone.
+     * Updates the task status as done or undone.
      *
      * @param task The interested task to mark.
      * @param isMarked Boolean value indicating whether a task is marked or not.
@@ -250,7 +254,7 @@ public class TaskList {
     }
 
     /**
-     * Check whether the date given is within the date range of the task.
+     * Checks whether the date given is within the date range of the task.
      *
      * @param task The task interested to check against.
      * @param date The date range specfied.
@@ -270,7 +274,7 @@ public class TaskList {
     }
 
     /**
-     * Retrieve and convert the date string to a LocalDate object from the user input.
+     * Retrieves and converts the date string to a LocalDate object from the user input.
      *
      * @param userInput The user input which contains the date string.
      * @return The LocalDate object of the date string.
@@ -288,7 +292,7 @@ public class TaskList {
         }
     }
     /**
-     * Return a boolean flag if the task description matches with the keywords.
+     * Returns a boolean flag if the task description matches with the keywords.
      *
      * @param task The interested task to search against.
      * @param keywords The list of keywords to search for.
@@ -307,7 +311,7 @@ public class TaskList {
     }
 
     /**
-     * Return a boolean flag if the task matches the desired task type.
+     * Returns a boolean flag if the task matches the desired task type.
      *
      * @param task The interested task to search against.
      * @param isTodo A boolean flag to limit search to todo task.
@@ -333,7 +337,7 @@ public class TaskList {
     }
 
     /**
-     * Using streams to sort the task stream alphabetically while ignoring case.
+     * Sorts the task stream alphabetically while ignoring case.
      *
      * @param taskStream The stream of tasks to sort.
      * @return The sorted stream of tasks.

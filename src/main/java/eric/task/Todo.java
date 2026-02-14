@@ -21,7 +21,8 @@ public class Todo extends Task {
 
     /**
      * {@inheritDoc}
-     * Includes the task in format required for the text file.
+     *
+     * Transforms the task to the format required for the text file.
      */
     @Override
     public String toFileFormat() {

@@ -20,7 +20,7 @@ public class MarkCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to marking or unmarking a task.
+     * Marks or unmarks a task.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
@@ -33,11 +33,16 @@ public class MarkCommand extends Command {
 
     }
 
+    /**
+     * Checks of the presence of the mark keyword in the task description.
+     *
+     * @return Boolean indicator for the mark keyword.
+     */
     private boolean checkIsMark() {
         return description.startsWith(MARK_KEYWORD);
     }
     /**
-     * Helper method to abstract low-level saving task process.
+     * Abstracts low-level saving task process.
      *
      * @param tasks The tasks to save.
      * @param repo The repository to save the tasks into.

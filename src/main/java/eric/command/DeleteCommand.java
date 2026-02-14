@@ -19,7 +19,7 @@ public class DeleteCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to deleting a task.
+     * Deletes a task and saves the changes.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
@@ -30,7 +30,7 @@ public class DeleteCommand extends Command {
     }
 
     /**
-     * Helper method to abstract low-level saving task process.
+     * Abstracts low-level saving task process.
      *
      * @param tasks The tasks to save.
      * @param repo The repository to save the tasks into.

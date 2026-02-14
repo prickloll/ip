@@ -13,7 +13,7 @@ public class ListCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to listing the tasks.
+     * Lists the tasks.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
