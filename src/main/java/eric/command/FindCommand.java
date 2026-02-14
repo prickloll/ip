@@ -45,7 +45,7 @@ public class FindCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Specific to finding a task via a description.
+     * Finds a task via the relevant search criteria.
      */
     @Override
     public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
@@ -57,7 +57,7 @@ public class FindCommand extends Command {
     }
 
     /**
-     * Helper method to deal with low-level parsing of string.
+     * Extracts the search criteria into a string to display to the user.
      *
      * @return The search result string.
      */
@@ -69,6 +69,12 @@ public class FindCommand extends Command {
         String taskType = formatFilters();
         return SEARCH_PREFIX + keywordsLine + isStrictMatch + isSortedResults + taskType + "\n";
     }
+
+    /**
+     * Formats and returns a string represent the task type.
+     *
+     * @return String representation of the task type.
+     */
     private String formatFilters() {
         if (!isToDo && !isDeadLine && !isEvent) {
             return "";

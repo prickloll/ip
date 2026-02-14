@@ -18,7 +18,7 @@ public class Deadline extends Task {
      * Initialises a Deadline task with a description and deadline.
      *
      * @param description The description of the task.
-     * @param by The deadline in yyyy-MM-dd format
+     * @param by The deadline in yyyy-MM-dd format.
      */
     public Deadline(String description, String by) throws EricException {
         super(description);
@@ -26,7 +26,7 @@ public class Deadline extends Task {
     }
 
     /**
-     * Parse dateString into an actual LocalDate object.
+     * Parses dateString into an actual LocalDate object.
      *
      * @param dateString The date string given.
      * @return A LocalDate object.
@@ -49,6 +49,7 @@ public class Deadline extends Task {
 
     /**
      * (@inheritDoc)
+     *
      * Includes the format the deadline task has to be in the text file.
      */
     @Override
@@ -58,7 +59,7 @@ public class Deadline extends Task {
     }
 
     /**
-     * Checks the internal state of the deadline task object
+     * Checks the internal state of the deadline task object.
      */
     private void checkInternalState() {
         assert this.by != null : "Deadline 'by' date should not be null.";

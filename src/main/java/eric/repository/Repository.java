@@ -28,7 +28,7 @@ public class Repository {
     }
 
     /**
-     * Creates directory if it does not exist.
+     * Creates a directory if it does not exist.
      *
      * @throws IOException If directory cannot be created.
      */
@@ -36,6 +36,12 @@ public class Repository {
         Files.createDirectories((Paths.get(TEXT_FILE_DIRECTORY)));
     }
 
+    /**
+     * Writes tasks to a file.
+     *
+     * @param tasks The arraylist of tasks to be written to a file.
+     * @throws IOException Exceptions relating to writing to a file.
+     */
     private void writeTasksToFile(ArrayList<Task> tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         for (Task task : tasks) {
@@ -45,6 +51,13 @@ public class Repository {
         fw.close();
     }
 
+    /**
+     * Loads tasks from the file into an arraylist.
+     *
+     * @param file The file to read the tasks from.
+     * @return An arraylist of tasks.
+     * @throws EricException Exceptions related to reading from a file.
+     */
     private ArrayList<Task> loadTasksFromFile(File file) throws EricException {
         ArrayList<Task> fileTasks = new ArrayList<>();
         try {

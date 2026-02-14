@@ -114,7 +114,7 @@ public class Ui {
     }
 
     /**
-     * Format the array of task in a string.
+     * Formats the array of task in a string.
      *
      * @param tasks The task to format.
      * @return The string of tasks in the task list.
