@@ -87,25 +87,39 @@ public class Task {
         boolean isDone = lineParts[1].equals("1");
         String description = lineParts[2];
 
-        Task currTask;
-        switch(taskType) {
-        case "T":
-            currTask = new Todo(description);
-            break;
-        case "D":
-            currTask = new Deadline(description, lineParts[3]);
-            break;
-        case "E":
-            currTask = new Event(description, lineParts[3], lineParts[4]);
-            break;
-        default:
-            throw new EricException("Unknown task type found in data file: " + taskType);
-        }
+        Task currTask = createTaskByType(taskType, description, lineParts);
         assert currTask != null : "Task object should have been created.";
+
         if (isDone) {
             currTask.markDone();
         }
+
         return currTask;
     }
+
+    /**
+     * Creates a task object based on the task type.
+     * Low-level: Handles task type switching and creation.
+     *
+     * @param taskType The task type identifier (T, D, E).
+     * @param description The task description.
+     * @param lineParts The full line parts for tasks needing additional data.
+     * @return A Task object of the appropriate type.
+     * @throws EricException If an unknown task type is found.
+     */
+    private static Task createTaskByType(String taskType, String description,
+                                        String[] lineParts) throws EricException {
+        switch(taskType) {
+        case "T":
+            return new Todo(description);
+        case "D":
+            return new Deadline(description, lineParts[3]);
+        case "E":
+            return new Event(description, lineParts[3], lineParts[4]);
+        default:
+            throw new EricException("Unknown task type found in data file: " + taskType);
+        }
+    }
+
 
 }

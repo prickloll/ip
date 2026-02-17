@@ -12,12 +12,14 @@ public class Eric {
     private static Repository repo;
     private static TaskList tasks;
     private static Ui ui;
+    private Parser parser;
 
     private String startMessage = "";
 
     public Eric() {
         this("./data/Eric.txt");
     }
+
     /**
      * Initialises the bot and load existing tasks if any.
      *
@@ -26,6 +28,7 @@ public class Eric {
     public Eric(String filePath) {
         ui = new Ui();
         repo = new Repository(filePath);
+        parser = new Parser();
         try {
             tasks = new TaskList(repo.load());
         } catch (EricException e) {
@@ -36,6 +39,7 @@ public class Eric {
         assert tasks != null : "Task List should be initialised even if loading from the .txt file fails.";
         assert ui != null : "Ui should be initialised.";
         assert repo != null : "Repository should be initialised.";
+        assert parser != null : "Parser should be initialised.";
     }
 
     /**
@@ -49,7 +53,7 @@ public class Eric {
             throw new NullPointerException("Input cannot be null");
         }
         try {
-            Command c = Parser.parse(input);
+            Command c = parser.parse(input);
             return c.execute(tasks, ui, repo);
 
         } catch (EricException e) {

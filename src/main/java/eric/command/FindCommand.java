@@ -58,17 +58,46 @@ public class FindCommand extends Command {
 
     /**
      * Extracts the search criteria into a string to display to the user.
+     * High-level: Coordinates formatting of all search criteria components.
      *
      * @return The search result string.
      */
     private String extractSearchCriteria() {
+        String keywordsLine = formatKeywords();           // High-level
+        String strictMatch = formatStrictMatchStatus();   // High-level
+        String sortStatus = formatSortStatus();           // High-level
+        String filters = formatFilters();                 // High-level
 
-        String keywordsLine = String.join(", ", keywords);
-        String isStrictMatch = isStrict ? " (All must match strictly) " : " (Loose match) ";
-        String isSortedResults = isSorted ? " (Sorted) " : " (Unsorted) ";
-        String taskType = formatFilters();
-        return SEARCH_PREFIX + keywordsLine + isStrictMatch + isSortedResults + taskType + "\n";
+        return SEARCH_PREFIX + keywordsLine + strictMatch + sortStatus + filters + "\n";
     }
+
+    /**
+     * Formats the keywords for display.
+     *
+     * @return Comma-separated keywords string.
+     */
+    private String formatKeywords() {
+        return String.join(", ", keywords);
+    }
+
+    /**
+     * Formats the strict match status for display.
+     *
+     * @return String indicating strict or loose matching.
+     */
+    private String formatStrictMatchStatus() {
+        return isStrict ? " (All must match strictly) " : " (Loose match) ";
+    }
+
+    /**
+     * Formats the sort status for display.
+     *
+     * @return String indicating sorted or unsorted results.
+     */
+    private String formatSortStatus() {
+        return isSorted ? " (Sorted) " : " (Unsorted) ";
+    }
+
 
     /**
      * Formats and returns a string represent the task type.

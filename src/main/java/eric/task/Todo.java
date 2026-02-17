@@ -22,7 +22,9 @@ public class Todo extends Task {
     /**
      * {@inheritDoc}
      *
-     * Transforms the task to the format required for the text file.
+     * <p>File format: {@code T | <status> | <description>}</p>
+     *
+     * @return the text representation suitable for saving to file
      */
     @Override
     public String toFileFormat() {

@@ -24,6 +24,34 @@ public class Parser {
     private enum CommandType {
         BYE, TODO, DEADLINE, EVENT, MARK, UNMARK, LIST, DELETE, FINDDATE, FIND, UNKNOWN
     }
+
+    // Find command options
+    private boolean isStrict;
+    private boolean isToDo;
+    private boolean isEvent;
+    private boolean isDeadLine;
+    private boolean isSorted;
+    private LocalDate searchDate;
+
+    /**
+     * Initialises a Parser with default find options.
+     */
+    public Parser() {
+        resetFindOptions();
+    }
+
+    /**
+     * Resets all find options to default state.
+     */
+    private void resetFindOptions() {
+        this.isStrict = false;
+        this.isToDo = false;
+        this.isEvent = false;
+        this.isDeadLine = false;
+        this.isSorted = false;
+        this.searchDate = null;
+    }
+
     /**
      * Takes in the user input and execute corresponding commands.
      *
@@ -31,7 +59,7 @@ public class Parser {
      * @return Command Returns the command object corresponding to the user input.
      * @throws EricException If the commands or parameters are invalid.
      */
-    public static Command parse(String userInput) throws EricException {
+    public Command parse(String userInput) throws EricException {
         CommandType command = getCommandType(userInput);
         switch (command) {
         case BYE:
@@ -74,38 +102,60 @@ public class Parser {
 
     /**
      * Creates a find command object based on user input and flags.
+     * High-level: Coordinates option extraction and keyword validation.
      *
      * @param input The user input.
      * @return The find command object.
      * @throws EricException The keyword or date to search for is missing.
      */
-    private static Command configureFind(String input) throws EricException {
-        //for strict searching
-        boolean isStrict = input.contains("/all");
+    private Command configureFind(String input) throws EricException {
+        extractFindOptions(input);
+        String[] keywords = validateAndExtractKeywords(input);
 
-        //Detect filter for different events
-        boolean isToDo = input.contains("/todo");
-        boolean isEvent = input.contains("/event");
-        boolean isDeadLine = input.contains("/deadline");
-        boolean isSorted = input.contains("/sort");
-        boolean hasDate = input.contains("/date");
-        LocalDate searchDate = null;
-        if (hasDate) {
-            searchDate = parseDateFromInput(input);
+        return new FindCommand(keywords, searchDate,
+                              isStrict, isToDo,
+                              isEvent, isDeadLine,
+                              isSorted);
+    }
+
+    /**
+     * Extracts and stores find options from user input.
+     * Low-level: Detects all flags and parses date if present.
+     *
+     * @param input The user input containing flags.
+     * @throws EricException If date format is invalid.
+     */
+    private void extractFindOptions(String input) throws EricException {
+        resetFindOptions();
+
+        this.isStrict = input.contains("/all");
+        this.isToDo = input.contains("/todo");
+        this.isEvent = input.contains("/event");
+        this.isDeadLine = input.contains("/deadline");
+        this.isSorted = input.contains("/sort");
+
+        if (input.contains("/date")) {
+            this.searchDate = parseDateFromInput(input);
         }
+    }
 
-        //Remove all flags from input
+    /**
+     * Validates and extracts keywords from user input.
+     * Mid-level: Cleans flags and validates content.
+     *
+     * @param input The user input.
+     * @return Array of search keywords.
+     * @throws EricException If no keywords provided.
+     */
+    private static String[] validateAndExtractKeywords(String input)
+            throws EricException {
         String cleanInput = cleanInputFlags(input);
 
         if (cleanInput.isEmpty()) {
             throw new EricException("Please provide a keyword/date to search for against the task list.");
         }
 
-        //extract keywords
-        String[] keywords = cleanInput.split("\\s+");
-        return new FindCommand(keywords, searchDate, isStrict, isToDo, isEvent, isDeadLine, isSorted);
-
-
+        return cleanInput.split("\\s+");
     }
 
     /**

@@ -1,42 +1,32 @@
 package eric.command;
 
 import eric.EricException;
-import eric.repository.Repository;
 import eric.task.Task;
 import eric.task.TaskList;
-import eric.ui.Ui;
 
 /**
  * Represents a command to add and store a new event task.
  */
-public class AddEventCommand extends Command {
-    private final String description;
+public class AddEventCommand extends AddTaskCommand {
 
+    /**
+     * Initialises an AddEventCommand with event details.
+     *
+     * @param description The event command string including /from and /to flags with dates.
+     */
     public AddEventCommand(String description) {
-        this.description = description;
+        super(description);
     }
 
     /**
-     * {@inheritDoc}
+     * Adds an event task to the task list.
      *
-     * Adds and stores an event task.
+     * @param tasks The task list to add to.
+     * @return The newly created Event task.
+     * @throws EricException If the format is invalid or dates are malformed.
      */
     @Override
-    public String execute(TaskList tasks, Ui ui, Repository repo) throws EricException {
-        Task addedTask = tasks.addEvent(description);
-        assert addedTask != null : "Task should have been successfully created and returned.";
-        saveTasks(tasks, repo);
-        return ui.displayTaskAdded(addedTask, tasks.getSize());
-    }
-
-    /**
-     * Abstracts low-level saving task process.
-     *
-     * @param tasks The tasks to save.
-     * @param repo The repository to save the tasks into.
-     * @throws EricException If an error occurs during the saving of the task.
-     */
-    public void saveTasks(TaskList tasks, Repository repo) throws EricException {
-        repo.save(tasks.getEveryTask());
+    protected Task addTask(TaskList tasks) throws EricException {
+        return tasks.addEvent(description);
     }
 }

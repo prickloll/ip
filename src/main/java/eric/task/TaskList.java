@@ -106,26 +106,61 @@ public class TaskList {
     }
     /**
      * Finds task based on keywords.
+     * High-level: Coordinates filtering and sorting of tasks.
      *
      * @param keywords The keywords to search against.
+     * @param searchDate Optional date to filter tasks.
      * @param isStrict How strict the searching must be.
      * @param isTodo Task type flag for searching only for todo tasks.
      * @param isDeadline Task type flag for searching only for deadline tasks.
      * @param isEvent Task type flag for searching only for event tasks.
-     * @return List of tasks that matches the contraints.
-     * @throws EricException If the keyword is not specified.
+     * @param isSorted Whether to sort results alphabetically.
+     * @return List of tasks that matches the constraints.
      */
     public ArrayList<Task> findTasksByKeyword(String[] keywords, LocalDate searchDate, boolean isStrict, boolean isTodo,
                                               boolean isDeadline, boolean isEvent, boolean isSorted) {
-        Stream<Task> tasksStream = tasks.stream()
-               .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
-               .filter(task -> matchKeyword(task, keywords, isStrict))
-                .filter(task -> searchDate == null || withinDateRange(task, searchDate));
-        if (isSorted) {
-            tasksStream = sortAlphabetically(tasksStream);
-        }
-        return tasksStream.collect(Collectors.toCollection(ArrayList::new));
+        Stream<Task> filtered = filterTasksBySearchCriteria(keywords, searchDate,
+                                                           isStrict, isTodo,
+                                                           isDeadline, isEvent);
+        return collectWithSorting(filtered, isSorted);
     }
+
+    /**
+     * Filters tasks based on search criteria.
+     * High-level: Applies all necessary filters to the task stream.
+     *
+     * @param keywords Keywords to search for.
+     * @param searchDate Optional date filter.
+     * @param isStrict Strictness of keyword matching.
+     * @param isTodo Filter for todo tasks.
+     * @param isDeadline Filter for deadline tasks.
+     * @param isEvent Filter for event tasks.
+     * @return Filtered stream of tasks.
+     */
+    private Stream<Task> filterTasksBySearchCriteria(String[] keywords, LocalDate searchDate,
+                                                     boolean isStrict, boolean isTodo,
+                                                     boolean isDeadline, boolean isEvent) {
+        return tasks.stream()
+            .filter(task -> matchTaskType(task, isTodo, isDeadline, isEvent))
+            .filter(task -> matchKeyword(task, keywords, isStrict))
+            .filter(task -> searchDate == null || withinDateRange(task, searchDate));
+    }
+
+    /**
+     * Collects stream results with optional sorting.
+     * High-level: Applies sorting if requested and collects into ArrayList.
+     *
+     * @param stream The filtered task stream.
+     * @param isSorted Whether to sort alphabetically.
+     * @return ArrayList of tasks, sorted if requested.
+     */
+    private ArrayList<Task> collectWithSorting(Stream<Task> stream, boolean isSorted) {
+        if (isSorted) {
+            stream = sortAlphabetically(stream);
+        }
+        return stream.collect(Collectors.toCollection(ArrayList::new));
+    }
+
 
     public int getSize() {
         return tasks.size();
@@ -155,7 +190,7 @@ public class TaskList {
     }
 
     /**
-     * Retreives the todo task description
+     * Retrieves the todo task description.
      *
      * @param input The todo task string input by the user.
      * @param errorMsg The error message associated with the todo task.
