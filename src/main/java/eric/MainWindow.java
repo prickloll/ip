@@ -50,6 +50,13 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+        if (input == null || input.trim().isEmpty()) {
+            dialogContainer.getChildren().add(
+                    DialogBox.getEricDialog("Please enter a command.", ericImage)
+            );
+            userInput.clear();
+            return;
+        }
         String response = eric.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
@@ -63,4 +70,3 @@ public class MainWindow extends AnchorPane {
         }
     }
 }
-

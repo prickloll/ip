@@ -63,10 +63,10 @@ public class FindCommand extends Command {
      * @return The search result string.
      */
     private String extractSearchCriteria() {
-        String keywordsLine = formatKeywords();           // High-level
-        String strictMatch = formatStrictMatchStatus();   // High-level
-        String sortStatus = formatSortStatus();           // High-level
-        String filters = formatFilters();                 // High-level
+        String keywordsLine = formatKeywords();
+        String strictMatch = formatStrictMatchStatus();
+        String sortStatus = formatSortStatus();
+        String filters = formatFilters();
 
         return SEARCH_PREFIX + keywordsLine + strictMatch + sortStatus + filters + "\n";
     }

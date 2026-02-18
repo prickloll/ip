@@ -92,6 +92,3 @@ public class Eric {
     }
 
 }
-
-
-

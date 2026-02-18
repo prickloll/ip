@@ -170,7 +170,7 @@ public class Parser {
      * @return The user input without the flags.
      */
     private static String cleanInputFlags(String input) {
-        return input.replaceAll("find", "")
+        return input.replaceFirst("^find\\b", "")
                 .replaceAll("/date\\s+\\S+", "")
                 .replaceAll("\\s+/all\\b", "")
                 .replaceAll("\\s+/todo\\b", "")

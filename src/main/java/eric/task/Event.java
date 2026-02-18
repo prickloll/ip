@@ -40,9 +40,12 @@ public class Event extends Task {
         try {
             this.from = LocalDate.parse(from.trim());
             this.to = LocalDate.parse(to.trim());
+            if (this.from.isAfter(this.to)) {
+                throw new EricException("Event start date must not be after end date.");
+            }
             assert this.from != null && this.to != null : "Event from and to must not be null.";
         } catch (DateTimeParseException e) {
-            throw new EricException("Enter the date in the yyyy-MM-dd format please!");
+            throw new EricException("Event date is in the wrong format!");
         }
 
 

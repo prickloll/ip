@@ -94,6 +94,9 @@ public class Repository {
      * @throws EricException If an I/O error happens during the save process.
      */
     public void save(ArrayList<Task> tasks) throws EricException {
+        if (tasks == null) {
+            throw new EricException("Task list cannot be null.");
+        }
         try {
             makeFolder();
             writeTasksToFile(tasks);
