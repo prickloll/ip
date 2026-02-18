@@ -114,7 +114,7 @@ public class Parser {
 
         return new FindCommand(keywords, searchDate,
                               isStrict, isToDo,
-                              isEvent, isDeadLine,
+                              isDeadLine, isEvent,
                               isSorted);
     }
 
@@ -128,13 +128,13 @@ public class Parser {
     private void extractFindOptions(String input) throws EricException {
         resetFindOptions();
 
-        this.isStrict = input.contains("/all");
-        this.isToDo = input.contains("/todo");
-        this.isEvent = input.contains("/event");
-        this.isDeadLine = input.contains("/deadline");
-        this.isSorted = input.contains("/sort");
+        this.isStrict = input.matches(".*\\s+/all\\b.*") || input.matches("^/all\\b.*");
+        this.isToDo = input.matches(".*\\s+/todo\\b.*") || input.matches("^/todo\\b.*");
+        this.isEvent = input.matches(".*\\s+/event\\b.*") || input.matches("^/event\\b.*");
+        this.isDeadLine = input.matches(".*\\s+/deadline\\b.*") || input.matches("^/deadline\\b.*");
+        this.isSorted = input.matches(".*\\s+/sort\\b.*") || input.matches("^/sort\\b.*");
 
-        if (input.contains("/date")) {
+        if (input.matches(".*\\s+/date\\b.*") || input.matches("^/date\\b.*")) {
             this.searchDate = parseDateFromInput(input);
         }
     }
@@ -191,10 +191,18 @@ public class Parser {
         String[] parts = input.split("/date");
 
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
-            throw new EricException("Please provide a date to search after the /dateflag!");
+            throw new EricException("Please provide a date to search after the /date flag!");
         }
 
-        String dateString = parts[1].trim().split("\\s+")[0];
+        String afterDateFlag = parts[1].trim();
+        String dateString = afterDateFlag.split("\\s+")[0];
+
+        // Check if user might have typo'd the flag (e.g., /dateline instead of /deadline)
+        if (dateString.startsWith("line") || dateString.startsWith("event")
+                || dateString.startsWith("todo")) {
+            throw new EricException("Invalid flag detected. Did you mean /deadline, /event, /todo, or /all?");
+        }
+
         try {
             return LocalDate.parse(dateString);
         } catch (DateTimeParseException e) {
