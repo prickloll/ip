@@ -1,5 +1,6 @@
 package eric;
 import eric.command.Command;
+import eric.command.ExitCommand;
 import eric.parser.Parser;
 import eric.repository.Repository;
 import eric.task.TaskList;
@@ -12,12 +13,14 @@ public class Eric {
     private static Repository repo;
     private static TaskList tasks;
     private static Ui ui;
-
+    private Parser parser;
+    private boolean isExit = false;
     private String startMessage = "";
 
     public Eric() {
         this("./data/Eric.txt");
     }
+
     /**
      * Initialises the bot and load existing tasks if any.
      *
@@ -26,6 +29,7 @@ public class Eric {
     public Eric(String filePath) {
         ui = new Ui();
         repo = new Repository(filePath);
+        parser = new Parser();
         try {
             tasks = new TaskList(repo.load());
         } catch (EricException e) {
@@ -36,6 +40,7 @@ public class Eric {
         assert tasks != null : "Task List should be initialised even if loading from the .txt file fails.";
         assert ui != null : "Ui should be initialised.";
         assert repo != null : "Repository should be initialised.";
+        assert parser != null : "Parser should be initialised.";
     }
 
     /**
@@ -49,12 +54,25 @@ public class Eric {
             throw new NullPointerException("Input cannot be null");
         }
         try {
-            Command c = Parser.parse(input);
+            Command c = parser.parse(input);
+            // Check if the command is an exit command
+            if (c instanceof ExitCommand) {
+                isExit = true;
+            }
             return c.execute(tasks, ui, repo);
 
         } catch (EricException e) {
             return ui.errorMsg(e.getMessage());
         }
+    }
+
+    /**
+     * Checks if the program should exit.
+     *
+     * @return true if exit command was executed, false otherwise.
+     */
+    public boolean shouldExit() {
+        return isExit;
     }
 
     /**
@@ -74,6 +92,3 @@ public class Eric {
     }
 
 }
-
-
-

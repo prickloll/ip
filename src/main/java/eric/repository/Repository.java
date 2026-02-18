@@ -38,18 +38,33 @@ public class Repository {
 
     /**
      * Writes tasks to a file.
+     * High-level: Opens file and delegates writing all tasks.
      *
      * @param tasks The arraylist of tasks to be written to a file.
      * @throws IOException Exceptions relating to writing to a file.
      */
     private void writeTasksToFile(ArrayList<Task> tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
+        writeAllTasksToWriter(fw, tasks);
+        fw.close();
+    }
+
+    /**
+     * Writes all tasks to the file writer, one per line.
+     * Low-level: Iterates through tasks and writes each one.
+     *
+     * @param fw The FileWriter to write tasks to.
+     * @param tasks The tasks to write.
+     * @throws IOException If writing fails.
+     */
+    private void writeAllTasksToWriter(FileWriter fw, ArrayList<Task> tasks)
+            throws IOException {
         for (Task task : tasks) {
             assert task != null : "Cannot save a null object into the task list.";
             fw.write(task.toFileFormat() + System.lineSeparator());
         }
-        fw.close();
     }
+
 
     /**
      * Loads tasks from the file into an arraylist.
@@ -79,6 +94,9 @@ public class Repository {
      * @throws EricException If an I/O error happens during the save process.
      */
     public void save(ArrayList<Task> tasks) throws EricException {
+        if (tasks == null) {
+            throw new EricException("Task list cannot be null.");
+        }
         try {
             makeFolder();
             writeTasksToFile(tasks);

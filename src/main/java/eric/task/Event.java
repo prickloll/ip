@@ -16,11 +16,12 @@ public class Event extends Task {
     protected LocalDate from;
 
     /**
-     * Intialises an Event task  with a description, start and end time.
+     * Initialises an Event task with a description, start and end time.
      *
      * @param description The description of the event.
-     * @param from The start time and/or date of the event.
-     * @param to The end time and/or date of the event.
+     * @param from The start time and/or date of the event in yyyy-MM-dd format.
+     * @param to The end time and/or date of the event in yyyy-MM-dd format.
+     * @throws EricException If wrong date format given.
      */
     public Event(String description, String from, String to) throws EricException {
         super(description);
@@ -31,22 +32,30 @@ public class Event extends Task {
     /**
      * Parses the from and to string into the Event object.
      *
-     * @param from The from date string.
-     * @param to The to date string.
+     * @param from The from date string in yyyy-MM-dd format.
+     * @param to The to date string in yyyy-MM-dd format.
      * @throws EricException If wrong date format given.
      */
     private void parseDate(String from, String to) throws EricException {
         try {
             this.from = LocalDate.parse(from.trim());
             this.to = LocalDate.parse(to.trim());
+            if (this.from.isAfter(this.to)) {
+                throw new EricException("Event start date must not be after end date.");
+            }
             assert this.from != null && this.to != null : "Event from and to must not be null.";
         } catch (DateTimeParseException e) {
-            throw new EricException("Enter the date in the yyyy-MM-dd format please!");
+            throw new EricException("Event date is in the wrong format!");
         }
 
 
     }
 
+    /**
+     * Returns a human-readable representation of the event task.
+     *
+     * @return formatted string, e.g. "[E][ ] description (from: Jan 1 2024 to: Jan 2 2024)"
+     */
     @Override
     public String toString() {
         assert this.from != null && this.to != null : "Event  from and to must not be null.";
@@ -58,7 +67,9 @@ public class Event extends Task {
     /**
      * {@inheritDoc}
      *
-     * Includes the start and end times of the task in the text file.
+     * <p>File format: {@code E | <status> | <description> | <from yyyy-MM-dd> | <to yyyy-MM-dd>}</p>
+     *
+     * @return the text representation suitable for saving to file
      */
     @Override
     public String toFileFormat() {

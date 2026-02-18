@@ -36,10 +36,15 @@ public class Deadline extends Task {
         try {
             return LocalDate.parse(dateString.trim());
         } catch (DateTimeParseException e) {
-            throw new EricException("Enter the date in the yyyy-MM-dd format please!");
+            throw new EricException("Deadline date is in the wrong format!");
         }
     }
 
+    /**
+     * Returns a human-readable representation of the deadline task.
+     *
+     * @return formatted string, e.g. "[D][ ] description (by: Jan 1 2024)"
+     */
     @Override
     public String toString() {
         checkInternalState();
@@ -48,9 +53,11 @@ public class Deadline extends Task {
     }
 
     /**
-     * (@inheritDoc)
+     * {@inheritDoc}
      *
-     * Includes the format the deadline task has to be in the text file.
+     * <p>File format: {@code D | <status> | <description> | <yyyy-MM-dd>}</p>
+     *
+     * @return the text representation suitable for saving to file
      */
     @Override
     public String toFileFormat() {
@@ -59,7 +66,9 @@ public class Deadline extends Task {
     }
 
     /**
-     * Checks the internal state of the deadline task object.
+     * Asserts the object's invariants before serialization.
+     * Called before toString() and toFileFormat() to ensure data consistency
+     * and catch internal state corruption early during testing.
      */
     private void checkInternalState() {
         assert this.by != null : "Deadline 'by' date should not be null.";
