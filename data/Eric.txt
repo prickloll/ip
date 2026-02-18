@@ -1,5 +1,4 @@
 D | 0 | return book | 2026-12-01
-D | 0 | HW | 2026-02-01
 T | 0 | read book
 D | 0 | return book | 2026-02-01
 E | 0 | Project Meeting | 2026-02-15 | 2026-02-16

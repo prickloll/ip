@@ -302,7 +302,7 @@ public class TaskList {
         if (task instanceof Event) {
             Event event = (Event) task;
             boolean notBeforeStart = !date.isBefore(event.from);
-            boolean notAfterEnd = !date.isBefore(event.to);
+            boolean notAfterEnd = !date.isAfter(event.to);
             return notBeforeStart && notAfterEnd;
         }
         return false;
