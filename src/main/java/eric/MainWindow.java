@@ -1,5 +1,6 @@
 package eric;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 /**
  * Controller for the main GUI.
  */
@@ -30,16 +32,20 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /**
+     * Injects the Eric chatbot instance into this controller.
+     * Called from Main.java to provide the chatbot logic to the GUI.
+     *
+     * @param e The Eric chatbot instance.
+     */
     public void setEric(Eric e) {
         eric = e;
         dialogContainer.getChildren().addAll(DialogBox.getEricDialog(eric.getGreeting(), ericImage));
-
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Creates two dialog boxes, for user input and Eric's reply.
+     * Clears the user input after processing.
      */
     @FXML
     private void handleUserInput() {
@@ -50,6 +56,11 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getEricDialog(response, ericImage)
         );
         userInput.clear();
+
+        // Close the window if exit command was executed
+        if (eric.shouldExit()) {
+            Platform.exit();
+        }
     }
 }
 

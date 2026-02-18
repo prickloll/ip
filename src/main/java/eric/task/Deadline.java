@@ -36,7 +36,7 @@ public class Deadline extends Task {
         try {
             return LocalDate.parse(dateString.trim());
         } catch (DateTimeParseException e) {
-            throw new EricException("Enter the date in the yyyy-MM-dd format please!");
+            throw new EricException("Deadline date is in the wrong format!");
         }
     }
 

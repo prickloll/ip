@@ -145,14 +145,19 @@ public class Parser {
      *
      * @param input The user input.
      * @return Array of search keywords.
-     * @throws EricException If no keywords provided.
+     * @throws EricException If no keywords or date provided.
      */
-    private static String[] validateAndExtractKeywords(String input)
-            throws EricException {
+    private String[] validateAndExtractKeywords(String input) throws EricException {
         String cleanInput = cleanInputFlags(input);
 
-        if (cleanInput.isEmpty()) {
+        // Allow empty keywords if a date is provided
+        if (cleanInput.isEmpty() && searchDate == null) {
             throw new EricException("Please provide a keyword/date to search for against the task list.");
+        }
+
+        // Return keywords if present, otherwise return empty array
+        if (cleanInput.isEmpty()) {
+            return new String[] { "" };
         }
 
         return cleanInput.split("\\s+");
@@ -165,13 +170,13 @@ public class Parser {
      * @return The user input without the flags.
      */
     private static String cleanInputFlags(String input) {
-        return input.replace("find", "")
-                .replace("/date\\s+\\S+", "")
-                .replace("\\s+/all\\b", "")
-                .replace("\\s+/todo\\b", "")
-                .replace("\\s+/deadline\\b", "")
-                .replace("\\s+/event\\b", "")
-                .replace("\\s+/sort\\b", "")
+        return input.replaceAll("find", "")
+                .replaceAll("/date\\s+\\S+", "")
+                .replaceAll("\\s+/all\\b", "")
+                .replaceAll("\\s+/todo\\b", "")
+                .replaceAll("\\s+/deadline\\b", "")
+                .replaceAll("\\s+/event\\b", "")
+                .replaceAll("\\s+/sort\\b", "")
                 .trim();
     }
 

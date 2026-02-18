@@ -105,7 +105,7 @@ public class Task {
      * @param description The task description.
      * @param lineParts The full line parts for tasks needing additional data.
      * @return A Task object of the appropriate type.
-     * @throws EricException If an unknown task type is found.
+     * @throws EricException If an unknown task type is found or required data is missing.
      */
     private static Task createTaskByType(String taskType, String description,
                                         String[] lineParts) throws EricException {
@@ -113,8 +113,14 @@ public class Task {
         case "T":
             return new Todo(description);
         case "D":
+            if (lineParts.length < 4) {
+                throw new EricException("File might be corrupted!");
+            }
             return new Deadline(description, lineParts[3]);
         case "E":
+            if (lineParts.length < 5) {
+                throw new EricException("File might be corrupted!");
+            }
             return new Event(description, lineParts[3], lineParts[4]);
         default:
             throw new EricException("Unknown task type found in data file: " + taskType);

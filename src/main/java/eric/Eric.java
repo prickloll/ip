@@ -1,5 +1,6 @@
 package eric;
 import eric.command.Command;
+import eric.command.ExitCommand;
 import eric.parser.Parser;
 import eric.repository.Repository;
 import eric.task.TaskList;
@@ -13,7 +14,7 @@ public class Eric {
     private static TaskList tasks;
     private static Ui ui;
     private Parser parser;
-
+    private boolean isExit = false;
     private String startMessage = "";
 
     public Eric() {
@@ -54,11 +55,24 @@ public class Eric {
         }
         try {
             Command c = parser.parse(input);
+            // Check if the command is an exit command
+            if (c instanceof ExitCommand) {
+                isExit = true;
+            }
             return c.execute(tasks, ui, repo);
 
         } catch (EricException e) {
             return ui.errorMsg(e.getMessage());
         }
+    }
+
+    /**
+     * Checks if the program should exit.
+     *
+     * @return true if exit command was executed, false otherwise.
+     */
+    public boolean shouldExit() {
+        return isExit;
     }
 
     /**

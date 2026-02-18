@@ -1,11 +1,11 @@
 # AI Tool Usage Record
 
-**Project:** Eric Chatbot (CS2103/T)
-**Last Updated:** February 17, 2026
+**Project:** Eric Chatbot (CS2103)
+**Last Updated:** February 18, 2026
 
 ---
 
-## Session 1: Code Quality Evaluation & Refactoring
+## Code Quality Evaluation, Refactoring and Junit Test Generation
 
 **Tool:** GitHub Copilot
 
@@ -37,22 +37,20 @@
 - Task.java (minor refactoring)
 - Eric.java (updated to use Parser instance)
 - Main.java (improved error handling comments)
+- Ui.java (improved user interaction comments)
+- ParserTest.java (added Junit tests for new Parser constructor and refactored parse methods)
+- RepositoryTest.java (added Junit tests for refactored Repository save and load methods)
+- TaskFileParsingTest.java (added Junit tests for refactored Task file parsing logic)
+- DeadlineTest.java (added Junit tests for refactored Deadline parsing logic)
 
 **Challenges & Solutions:**
-- Making sure that the refactored code achieved what I desired and having to check
-through every change made.
+- Making sure that the refactored code achieved what I desired and having to check through every change made.
+- Junit test generated at times did not match the output of the refactored code, so I had to made sure they do.
 
 **Key Observations:**
 - Copilot excels at identifying code quality issues and suggesting improvements
 - Generated documentation is professional and follows Java conventions
 - All refactoring changes maintained backward compatibility
 - Comments and documentation follow CS2103 course standards
-- SLAP compliance better achieved across all 20 files
-
----
-
-
-
-
-
-
+- SLAP compliance and other code quality improvement were successfully achieved
+- Mass creation of Junit for specific methods specified

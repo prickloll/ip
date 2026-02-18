@@ -336,11 +336,30 @@ public class TaskList {
      */
     private boolean matchKeyword(Task task, String[] keywords, boolean isStrict) {
         String taskDescription = task.getDescription().toLowerCase();
+
+        // If keyword is empty string or no keywords, match all tasks
+        if (keywords == null || keywords.length == 0
+                || (keywords.length == 1 && keywords[0].isEmpty())) {
+            return true;
+        }
+
+        // Filter out empty keywords before matching
+        String[] nonEmptyKeywords = Arrays.stream(keywords)
+                .filter(keyword -> !keyword.isEmpty())
+                .toArray(String[]::new);
+
+        // If all keywords were empty, match all
+        if (nonEmptyKeywords.length == 0) {
+            return true;
+        }
+
         if (isStrict) {
-            return Arrays.stream(keywords)
+            // All keywords must be present (AND)
+            return Arrays.stream(nonEmptyKeywords)
                     .allMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
         } else {
-            return Arrays.stream(keywords)
+            // At least one keyword must be present (OR)
+            return Arrays.stream(nonEmptyKeywords)
                     .anyMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
         }
     }
