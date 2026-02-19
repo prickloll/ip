@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for Eric using FXML.
  */
 public class Main extends Application {
 
@@ -23,13 +23,13 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
-            stage.setTitle("EricBot");
+            stage.setTitle("Eric");
             stage.setScene(scene);
             fxmlLoader.<MainWindow>getController().setEric(eric);
             stage.show();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("EricBot - Startup Error");
+            alert.setTitle("Eric - Startup Error");
             alert.setHeaderText("Unable to start the application");
             alert.setContentText("The UI resources could not be loaded. Please check the app installation.");
             alert.showAndWait();

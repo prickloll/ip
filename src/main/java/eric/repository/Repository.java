@@ -38,7 +38,6 @@ public class Repository {
 
     /**
      * Writes tasks to a file.
-     * High-level: Opens file and delegates writing all tasks.
      *
      * @param tasks The arraylist of tasks to be written to a file.
      * @throws IOException Exceptions relating to writing to a file.
@@ -51,7 +50,6 @@ public class Repository {
 
     /**
      * Writes all tasks to the file writer, one per line.
-     * Low-level: Iterates through tasks and writes each one.
      *
      * @param fw The FileWriter to write tasks to.
      * @param tasks The tasks to write.

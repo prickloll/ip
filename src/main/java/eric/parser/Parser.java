@@ -14,7 +14,7 @@ import eric.command.ListCommand;
 import eric.command.MarkCommand;
 
 /**
- * Main logic for taking care of user inputs and calls the appropriate action.
+ * Represents main logic for taking care of user inputs and calls the appropriate action.
  */
 public class Parser {
 
@@ -102,7 +102,6 @@ public class Parser {
 
     /**
      * Creates a find command object based on user input and flags.
-     * High-level: Coordinates option extraction and keyword validation.
      *
      * @param input The user input.
      * @return The find command object.
@@ -120,7 +119,6 @@ public class Parser {
 
     /**
      * Extracts and stores find options from user input.
-     * Low-level: Detects all flags and parses date if present.
      *
      * @param input The user input containing flags.
      * @throws EricException If date format is invalid.
@@ -128,20 +126,30 @@ public class Parser {
     private void extractFindOptions(String input) throws EricException {
         resetFindOptions();
 
-        this.isStrict = input.matches(".*\\s+/all\\b.*") || input.matches("^/all\\b.*");
-        this.isToDo = input.matches(".*\\s+/todo\\b.*") || input.matches("^/todo\\b.*");
-        this.isEvent = input.matches(".*\\s+/event\\b.*") || input.matches("^/event\\b.*");
-        this.isDeadLine = input.matches(".*\\s+/deadline\\b.*") || input.matches("^/deadline\\b.*");
-        this.isSorted = input.matches(".*\\s+/sort\\b.*") || input.matches("^/sort\\b.*");
+        this.isStrict = containsFlag(input, "/all");
+        this.isToDo = containsFlag(input, "/todo");
+        this.isEvent = containsFlag(input, "/event");
+        this.isDeadLine = containsFlag(input, "/deadline");
+        this.isSorted = containsFlag(input, "/sort");
 
-        if (input.matches(".*\\s+/date\\b.*") || input.matches("^/date\\b.*")) {
+        if (containsFlag(input, "/date")) {
             this.searchDate = parseDateFromInput(input);
         }
     }
 
     /**
+     * Checks if input contains the specified flag.
+     *
+     * @param input The input string to check.
+     * @param flag The flag to look for.
+     * @return true if flag is present at word boundaries.
+     */
+    private boolean containsFlag(String input, String flag) {
+        return input.matches(".*\\s+" + flag + "\\b.*") || input.matches("^" + flag + "\\b.*");
+    }
+
+    /**
      * Validates and extracts keywords from user input.
-     * Mid-level: Cleans flags and validates content.
      *
      * @param input The user input.
      * @return Array of search keywords.

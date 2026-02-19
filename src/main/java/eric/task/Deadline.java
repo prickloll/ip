@@ -43,7 +43,7 @@ public class Deadline extends Task {
     /**
      * Returns a human-readable representation of the deadline task.
      *
-     * @return formatted string, e.g. "[D][ ] description (by: Jan 1 2024)"
+     * @return A formatted string
      */
     @Override
     public String toString() {
@@ -55,9 +55,7 @@ public class Deadline extends Task {
     /**
      * {@inheritDoc}
      *
-     * <p>File format: {@code D | <status> | <description> | <yyyy-MM-dd>}</p>
-     *
-     * @return the text representation suitable for saving to file
+     * @return The text representation suitable for saving to file
      */
     @Override
     public String toFileFormat() {
@@ -67,8 +65,7 @@ public class Deadline extends Task {
 
     /**
      * Asserts the object's invariants before serialization.
-     * Called before toString() and toFileFormat() to ensure data consistency
-     * and catch internal state corruption early during testing.
+     * Called before toString() and toFileFormat() to catch internal state issues early.
      */
     private void checkInternalState() {
         assert this.by != null : "Deadline 'by' date should not be null.";

@@ -8,6 +8,14 @@ public class Task {
     private static final String DONE_STATUS = "1";
     private static final String NOT_DONE_STATUS = "0";
     private static final String DELIMITER_PATTERN = " \\| ";
+    private static final int MIN_TODO_PARTS = 3;
+    private static final int MIN_DEADLINE_PARTS = 4;
+    private static final int MIN_EVENT_PARTS = 5;
+    private static final int DESCRIPTION_INDEX = 2;
+    private static final int DEADLINE_DATE_INDEX = 3;
+    private static final int EVENT_FROM_INDEX = 3;
+    private static final int EVENT_TO_INDEX = 4;
+
     protected String description;
     protected boolean isDone;
 
@@ -72,7 +80,7 @@ public class Task {
             throw new EricException("File might be corrupted!");
         }
         String[] lineParts = line.split(" \\| ", -1);
-        if (lineParts.length < 3) {
+        if (lineParts.length < MIN_TODO_PARTS) {
             throw new EricException("File might be corrupted!");
         }
         return createDesiredTask(lineParts);
@@ -88,7 +96,7 @@ public class Task {
     private static Task createDesiredTask(String[] lineParts) throws EricException {
         String taskType = lineParts[0];
         boolean isDone = lineParts[1].equals("1");
-        String description = lineParts[2];
+        String description = lineParts[DESCRIPTION_INDEX];
 
         Task currTask = createTaskByType(taskType, description, lineParts);
         assert currTask != null : "Task object should have been created.";
@@ -116,15 +124,15 @@ public class Task {
         case "T":
             return new Todo(description);
         case "D":
-            if (lineParts.length < 4) {
+            if (lineParts.length < MIN_DEADLINE_PARTS) {
                 throw new EricException("File might be corrupted!");
             }
-            return new Deadline(description, lineParts[3]);
+            return new Deadline(description, lineParts[DEADLINE_DATE_INDEX]);
         case "E":
-            if (lineParts.length < 5) {
+            if (lineParts.length < MIN_EVENT_PARTS) {
                 throw new EricException("File might be corrupted!");
             }
-            return new Event(description, lineParts[3], lineParts[4]);
+            return new Event(description, lineParts[EVENT_FROM_INDEX], lineParts[EVENT_TO_INDEX]);
         default:
             throw new EricException("Unknown task type found in data file: " + taskType);
         }

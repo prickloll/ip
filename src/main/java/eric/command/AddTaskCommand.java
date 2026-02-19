@@ -7,10 +7,7 @@ import eric.task.TaskList;
 import eric.ui.Ui;
 
 /**
- * Abstract base class for commands that add a new task.
- *
- * <p>Subclasses only need to implement the specific task addition logic.
- * The common execute() method handles persistence and response formatting.</p>
+ * Represents an abstract base class for commands that add a new task.
  */
 public abstract class AddTaskCommand extends Command {
     protected final String description;
@@ -25,10 +22,7 @@ public abstract class AddTaskCommand extends Command {
     }
 
     /**
-     * Template method that executes the task addition workflow.
-     *
-     * <p>Subclasses implement addTask() to provide specific task creation logic.
-     * This method handles persistence and user feedback consistently.</p>
+     * Executes the task addition workflow.
      *
      * @param tasks The task list to add to.
      * @param ui The user interface for displaying feedback.

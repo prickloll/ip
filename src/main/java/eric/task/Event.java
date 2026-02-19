@@ -54,7 +54,7 @@ public class Event extends Task {
     /**
      * Returns a human-readable representation of the event task.
      *
-     * @return formatted string, e.g. "[E][ ] description (from: Jan 1 2024 to: Jan 2 2024)"
+     * @return The formatted string.
      */
     @Override
     public String toString() {
@@ -67,9 +67,7 @@ public class Event extends Task {
     /**
      * {@inheritDoc}
      *
-     * <p>File format: {@code E | <status> | <description> | <from yyyy-MM-dd> | <to yyyy-MM-dd>}</p>
-     *
-     * @return the text representation suitable for saving to file
+     * @return The text representation suitable for saving to file
      */
     @Override
     public String toFileFormat() {

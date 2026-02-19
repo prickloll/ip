@@ -1,7 +1,7 @@
 # AI Tool Usage Record
 
 **Project:** Eric Chatbot (CS2103)
-**Last Updated:** February 18, 2026
+**Last Updated:** February 19, 2026
 
 ---
 
@@ -13,12 +13,10 @@
 
 **Code Analysis & Evaluation**
    - Analyzed 20 Java files for SLAP and coding standard compliance
-   - Generated 4 comprehensive evaluation reports
-   - Identified 5 files with violations (2 critical, 3 minor)
+   - Identified 5 files with violations
 
 **Comment Improvements (All Files)**
    - Updated Javadoc for all refactored methods
-   - Added "High-level," "Mid-level," and "Low-level" comments to explain abstraction
    - Added method parameter documentation (@param tags)
    - Added return value documentation (@return tags)
    - Added exception documentation (@throws tags)
@@ -27,9 +25,9 @@
 
 **Files Modified:**
 - AddTaskCommand.java (new abstract base class)
-- AddTodoCommand.java (refactored, 43 → 27 lines)
-- AddDeadlineCommand.java (refactored, 43 → 27 lines)
-- AddEventCommand.java (refactored, 43 → 27 lines)
+- AddTodoCommand.java (refactored)
+- AddDeadlineCommand.java (refactored)
+- AddEventCommand.java (refactored)
 - Parser.java (major refactoring + constructor)
 - TaskList.java (major refactoring)
 - FindCommand.java (minor refactoring)
@@ -42,10 +40,12 @@
 - RepositoryTest.java (added Junit tests for refactored Repository save and load methods)
 - TaskFileParsingTest.java (added Junit tests for refactored Task file parsing logic)
 - DeadlineTest.java (added Junit tests for refactored Deadline parsing logic)
+- README.md (created user guide)
 
 **Challenges & Solutions:**
 - Making sure that the refactored code achieved what I desired and having to check through every change made.
 - Junit test generated at times did not match the output of the refactored code, so I had to made sure they do.
+- When it made changes, it sometimes introduced new errors that I had to fix manually which was time-consuming.
 
 **Key Observations:**
 - Copilot excels at identifying code quality issues and suggesting improvements
