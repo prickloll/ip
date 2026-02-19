@@ -58,7 +58,6 @@ public class FindCommand extends Command {
 
     /**
      * Extracts the search criteria into a string to display to the user.
-     * High-level: Coordinates formatting of all search criteria components.
      *
      * @return The search result string.
      */
@@ -105,17 +104,28 @@ public class FindCommand extends Command {
      * @return String representation of the task type.
      */
     private String formatFilters() {
+        // Guard clause if no filters are set, return empty string
         if (!isToDo && !isDeadLine && !isEvent) {
             return "";
         }
-        String type = "";
-        if (isToDo) {
-            type = "Todos";
-        } else if (isDeadLine) {
-            type = "Deadline";
-        } else if (isEvent) {
-            type = "Event";
-        }
+
+        String type = determineFilterType();
         return " in [" + type + "]";
+    }
+
+    /**
+     * Determines the filter type name based on active flags.
+     *
+     * @return The filter type name.
+     */
+    private String determineFilterType() {
+        if (isToDo) {
+            return "Todos";
+        } else if (isDeadLine) {
+            return "Deadline";
+        } else if (isEvent) {
+            return "Event";
+        }
+        return "";
     }
 }

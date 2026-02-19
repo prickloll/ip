@@ -1,6 +1,5 @@
 package eric.task;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -37,13 +36,11 @@ public class TaskList {
      * @throws EricException If the task description is empty.
      */
     public Task addTodo(String userInput) throws EricException {
-        String description = toDoDescription(userInput, "The todo's description cannot be empty!");
-        Task t = new Todo(description);
-        int oldTaskSize = tasks.size();
-        tasks.add(t);
-        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
-        return t;
+        String description = extractToDoDescription(userInput);
+        Task task = new Todo(description);
+        return addTaskToList(task);
     }
+
     /**
      * Adds new deadline task to task list.
      *
@@ -54,11 +51,8 @@ public class TaskList {
     public Task addDeadline(String userInput) throws EricException {
         checkFormat(userInput, "Missing /by after declaring a deadline task!", "/by");
         String[] deadlineParts = tidyDeadlineParts(userInput);
-        Task t = new Deadline(deadlineParts[0], deadlineParts[1]);
-        int oldTaskSize = tasks.size();
-        tasks.add(t);
-        assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
-        return t;
+        Task task = new Deadline(deadlineParts[0], deadlineParts[1]);
+        return addTaskToList(task);
     }
 
     /**
@@ -71,11 +65,21 @@ public class TaskList {
     public Task addEvent(String userInput) throws EricException {
         checkFormat(userInput, "Event must have /from and /to identifiers!", "/from", "/to");
         String[] descriptions = tidyEventParts(userInput);
-        Task t = new Event(descriptions[0], descriptions[1].trim(), descriptions[2].trim());
+        Task task = new Event(descriptions[0], descriptions[1].trim(), descriptions[2].trim());
+        return addTaskToList(task);
+    }
+
+    /**
+     * Adds a task to the list with proper validation.
+     *
+     * @param task The task to add to the list.
+     * @return The added task.
+     */
+    private Task addTaskToList(Task task) {
         int oldTaskSize = tasks.size();
-        tasks.add(t);
+        tasks.add(task);
         assert tasks.size() == oldTaskSize + 1 : "The size of the task list should have increased after adding a task.";
-        return t;
+        return task;
     }
 
     /**
@@ -105,8 +109,7 @@ public class TaskList {
 
     }
     /**
-     * Finds task based on keywords.
-     * High-level: Coordinates filtering and sorting of tasks.
+     * Finds task based on keywords and filter.
      *
      * @param keywords The keywords to search against.
      * @param searchDate Optional date to filter tasks.
@@ -127,7 +130,6 @@ public class TaskList {
 
     /**
      * Filters tasks based on search criteria.
-     * High-level: Applies all necessary filters to the task stream.
      *
      * @param keywords Keywords to search for.
      * @param searchDate Optional date filter.
@@ -148,7 +150,6 @@ public class TaskList {
 
     /**
      * Collects stream results with optional sorting.
-     * High-level: Applies sorting if requested and collects into ArrayList.
      *
      * @param stream The filtered task stream.
      * @param isSorted Whether to sort alphabetically.
@@ -190,17 +191,16 @@ public class TaskList {
     }
 
     /**
-     * Retrieves the todo task description.
+     * Extracts the todo task description from user input.
      *
      * @param input The todo task string input by the user.
-     * @param errorMsg The error message associated with the todo task.
      * @return The todo task's description.
      * @throws EricException If the todo task description is empty.
      */
-    private String toDoDescription(String input, String errorMsg) throws EricException {
+    private String extractToDoDescription(String input) throws EricException {
         String[] descriptionParts = input.split(" ", 2);
         if (descriptionParts.length < 2 || descriptionParts[1].trim().isEmpty()) {
-            throw new EricException(errorMsg);
+            throw new EricException("The todo's description cannot be empty!");
         }
         return descriptionParts[1].trim();
     }
@@ -230,11 +230,25 @@ public class TaskList {
      */
     private String[] tidyDeadlineParts(String input) throws EricException {
         int firstSpace = input.indexOf(" ");
-        String[] deadlineParts = input.substring(firstSpace + 1).split(" /by");
-        if (deadlineParts.length < 2 || deadlineParts[1].trim().isEmpty()) {
+        String content = input.substring(firstSpace + 1);
+
+        // Find /by position
+        int byIndex = content.indexOf("/by");
+        if (byIndex == -1) {
+            throw new EricException("Missing /by in deadline command!");
+        }
+
+        String description = content.substring(0, byIndex).trim();
+        String dateString = content.substring(byIndex + 3).trim(); // +3 for "/by"
+
+        if (description.isEmpty()) {
+            throw new EricException("Deadline description cannot be empty!");
+        }
+        if (dateString.isEmpty()) {
             throw new EricException("Missing deadline after /by!");
         }
-        return new String[]{deadlineParts[0].trim(), deadlineParts[1].trim()};
+
+        return new String[]{description, dateString};
     }
 
     /**
@@ -247,16 +261,36 @@ public class TaskList {
     private String[] tidyEventParts(String input) throws EricException {
         int firstSpace = input.indexOf(" ");
         String content = input.substring(firstSpace + 1);
-        String[] fromParts = content.split(" /from", -1);
-        if (fromParts[0].trim().isEmpty()) {
-            throw new EricException("Event description is empty!");
+
+        // Find /from and /to positions
+        int fromIndex = content.indexOf("/from");
+        int toIndex = content.indexOf("/to");
+
+        if (fromIndex == -1) {
+            throw new EricException("Missing /from in event command!");
         }
-        String[] toParts = fromParts[1].split(" /to", -1);
-        if (toParts.length < 2 || toParts[0].trim().isBlank() || toParts[1].trim().isBlank()) {
-            throw new EricException("Event missing values after /from and /to!");
+        if (toIndex == -1) {
+            throw new EricException("Missing /to in event command!");
+        }
+        if (toIndex <= fromIndex) {
+            throw new EricException("/to must come after /from!");
         }
 
-        return new String[]{fromParts[0].trim(), toParts[0].trim(), toParts[1].trim()};
+        String description = content.substring(0, fromIndex).trim();
+        String fromDate = content.substring(fromIndex + 5, toIndex).trim();
+        String toDate = content.substring(toIndex + 3).trim();
+
+        if (description.isEmpty()) {
+            throw new EricException("Event description cannot be empty!");
+        }
+        if (fromDate.isEmpty()) {
+            throw new EricException("Missing start date after /from!");
+        }
+        if (toDate.isEmpty()) {
+            throw new EricException("Missing end date after /to!");
+        }
+
+        return new String[]{description, fromDate, toDate};
     }
 
     /**
@@ -309,24 +343,6 @@ public class TaskList {
     }
 
     /**
-     * Retrieves and converts the date string to a LocalDate object from the user input.
-     *
-     * @param userInput The user input which contains the date string.
-     * @return The LocalDate object of the date string.
-     * @throws EricException If an incorrect date format was given.
-     */
-    private LocalDate decipherSearchDate(String userInput) throws EricException {
-        String[] descriptions = userInput.split(" ");
-        if (descriptions.length < 2 || descriptions[1].trim().isEmpty()) {
-            throw new EricException("Please specify the date you want to search for!");
-        }
-        try {
-            return LocalDate.parse(descriptions[1].trim());
-        } catch (DateTimeParseException e) {
-            throw new EricException(("Use yyyy-MM-dd as the date format!"));
-        }
-    }
-    /**
      * Returns a boolean flag if the task description matches with the keywords.
      *
      * @param task The interested task to search against.
@@ -335,31 +351,57 @@ public class TaskList {
      * @return A boolean flag indicating if the task description is matched against any keyword.
      */
     private boolean matchKeyword(Task task, String[] keywords, boolean isStrict) {
-        String taskDescription = task.getDescription().toLowerCase();
-
-        // If keyword is empty string or no keywords, match all tasks
-        if (keywords == null || keywords.length == 0
-                || (keywords.length == 1 && keywords[0].isEmpty())) {
+        if (hasNoValidKeywords(keywords)) {
             return true;
         }
 
-        // Filter out empty keywords before matching
-        String[] nonEmptyKeywords = Arrays.stream(keywords)
+        String[] validKeywords = extractValidKeywords(keywords);
+        if (validKeywords.length == 0) {
+            return true;
+        }
+
+        return performKeywordMatching(task, validKeywords, isStrict);
+    }
+
+    /**
+     * Checks if the provided keywords array contains no valid keywords.
+     *
+     * @param keywords The keywords array to check.
+     * @return True if no valid keywords are present.
+     */
+    private boolean hasNoValidKeywords(String[] keywords) {
+        return keywords == null || keywords.length == 0
+                || (keywords.length == 1 && keywords[0].isEmpty());
+    }
+
+    /**
+     * Extracts non-empty keywords from the keywords array.
+     *
+     * @param keywords The original keywords array.
+     * @return Array containing only non-empty keywords.
+     */
+    private String[] extractValidKeywords(String[] keywords) {
+        return Arrays.stream(keywords)
                 .filter(keyword -> !keyword.isEmpty())
                 .toArray(String[]::new);
+    }
 
-        // If all keywords were empty, match all
-        if (nonEmptyKeywords.length == 0) {
-            return true;
-        }
+    /**
+     * Performs the actual keyword matching against task description.
+     *
+     * @param task The task to match against.
+     * @param validKeywords Non-empty keywords to match.
+     * @param isStrict Whether to use strict (AND) or loose (OR) matching.
+     * @return True if task matches the keyword criteria.
+     */
+    private boolean performKeywordMatching(Task task, String[] validKeywords, boolean isStrict) {
+        String taskDescription = task.getDescription().toLowerCase();
 
         if (isStrict) {
-            // All keywords must be present (AND)
-            return Arrays.stream(nonEmptyKeywords)
+            return Arrays.stream(validKeywords)
                     .allMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
         } else {
-            // At least one keyword must be present (OR)
-            return Arrays.stream(nonEmptyKeywords)
+            return Arrays.stream(validKeywords)
                     .anyMatch(keyword -> taskDescription.contains(keyword.toLowerCase()));
         }
     }
@@ -374,20 +416,36 @@ public class TaskList {
      * @return A boolean flag to indicate which task type it is tagged to.
      */
     private boolean matchTaskType(Task task, boolean isTodo, boolean isDeadLine, boolean isEvent) {
+        // If no specific type filters are set, match all tasks
         if (!isTodo && !isDeadLine && !isEvent) {
             return true;
         }
-        if (isTodo && task instanceof Todo) {
-            return true;
-        }
-        if (isDeadLine && task instanceof Deadline) {
-            return true;
-        }
-        if (isEvent && task instanceof Event) {
-            return true;
-        }
-        return false;
 
+        // Check each type filter
+        return matchesTodo(task, isTodo)
+                || matchesDeadline(task, isDeadLine)
+                || matchesEvent(task, isEvent);
+    }
+
+    /**
+     * Checks if task matches todo filter.
+     */
+    private boolean matchesTodo(Task task, boolean isTodo) {
+        return isTodo && task instanceof Todo;
+    }
+
+    /**
+     * Checks if task matches deadline filter.
+     */
+    private boolean matchesDeadline(Task task, boolean isDeadLine) {
+        return isDeadLine && task instanceof Deadline;
+    }
+
+    /**
+     * Checks if task matches event filter.
+     */
+    private boolean matchesEvent(Task task, boolean isEvent) {
+        return isEvent && task instanceof Event;
     }
 
     /**

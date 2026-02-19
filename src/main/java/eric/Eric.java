@@ -7,7 +7,7 @@ import eric.task.TaskList;
 import eric.ui.Ui;
 
 /**
- * Main entry point for Eric chatbot.
+ * The main entry point for Eric chatbot.
  */
 public class Eric {
     private static Repository repo;
@@ -69,7 +69,7 @@ public class Eric {
     /**
      * Checks if the program should exit.
      *
-     * @return true if exit command was executed, false otherwise.
+     * @return True if exit command was executed, false otherwise.
      */
     public boolean shouldExit() {
         return isExit;

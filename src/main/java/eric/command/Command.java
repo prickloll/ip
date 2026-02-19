@@ -16,7 +16,7 @@ public abstract class Command {
      * @param tasks The list of tasks.
      * @param ui The user interface for displaying the bot.
      * @param repo The repository for saving or loading the tasks.
-     * @return The command response as a string
+     * @return The command response as a string.
      * @throws EricException If an error occurs during command execution.
      */
     public abstract String execute(TaskList tasks, Ui ui, Repository repo) throws EricException;
