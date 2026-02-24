@@ -135,7 +135,7 @@ mark 1
 
 **Expected Output:**
 ```
-Nice! I've marked this task as done:
+Nice I've marked this task as done:
   [T][X] read book
 ```
 
@@ -173,7 +173,7 @@ delete 1
 
 **Expected Output:**
 ```
-Noted. I've removed this task:
+Alright, I have deleted this task:
   [T][ ] read book
 Now you have 2 tasks in the list.
 ```
